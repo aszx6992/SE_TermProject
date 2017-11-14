@@ -4,7 +4,7 @@ NAME
 	mdparser - parses .md file(s) into html file(s).
 
 SYNOPSIS
-	mdparser [OPTION] ... FILE ...
+	mdparser [OPTION] ... FILE.md ... [FILE.html] ... [FILE2.md] .... 
 
 DESCRIPTION
 	This manual page documents the mdparser command line functionality. It receives a .md file and
