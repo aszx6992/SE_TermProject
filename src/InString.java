@@ -1,6 +1,9 @@
 
 public class InString {
     boolean url_flag = false;         //만약 더러운 url이면 true. 아니면 false 유지
+    boolean set_code =false;
+    boolean set_flag = false;
+
     String text_url;
     String number;
     String update_string;
@@ -88,36 +91,55 @@ public class InString {
         buffer.append(word + " ");
     }
 
-    private void convCode(String[] inputBuffer) {
-        buffer = new StringBuffer();
-        int i = 0;
-        int backtick = -1;
+private void convCode(String[] inputBuffer) 
+    {
+       buffer = new StringBuffer();
+       int i = 0;
+       int backtick = -1;
 
-
-        for (i = 0; i < inputBuffer.length; i++) {
-            backtick = inputBuffer[i].indexOf("`");
-
-            if (backtick == 0) {
-                buffer.append("<code>");
-                String word = inputBuffer[i].substring(1);
-
-                buffer.append(word + " ");
-            }
-            if (backtick == inputBuffer[i].length() - 1) {
-                String word = inputBuffer[i].substring(0, inputBuffer[i].length() - 1);
-
-                buffer.append(word);
-                buffer.append("</code> ");
-
-            }
-            if (backtick != 0 && backtick != inputBuffer[i].length() - 1) {
-                if (i == inputBuffer.length - 1) {
-                    buffer.append(inputBuffer[i]);
-                } else {
-                    buffer.append(inputBuffer[i] + " ");
-                }
-            }
-        }
+             
+       for(i = 0; i < inputBuffer.length; i++)
+       {
+          backtick = inputBuffer[i].indexOf("`");
+          
+          if(backtick == 0)
+          {   
+             buffer.append("<code>");
+             String word = inputBuffer[i].substring(1);
+             
+             buffer.append(word + " ");
+          }
+          if(backtick == inputBuffer[i].length() - 1)
+          {
+             String word = inputBuffer[i].substring(0, inputBuffer[i].length() - 1);
+             
+             buffer.append(word);
+             buffer.append("</code> ");
+             
+          }
+          if(backtick == inputBuffer[i].length() - 2)
+          {
+             String word = inputBuffer[i].substring(0, inputBuffer[i].length() -2);
+             
+             buffer.append(word);
+             buffer.append("</code>" + inputBuffer[i].charAt(inputBuffer[i].length() - 1));
+             set_code = true;
+          }
+          if(backtick != 0 && backtick != inputBuffer[i].length() - 1 && backtick != inputBuffer[i].length() - 2)
+          {
+       
+             if(i == inputBuffer.length - 1)
+             {
+                buffer.append(inputBuffer[i]);
+             }
+             else
+             {
+                buffer.append(inputBuffer[i] + " ");
+             }
+          }          
+       }
+          
+        //add to StringBuffer buffer
     }
 
     private void convUrl(String[] inputBuffer) {
@@ -127,32 +149,37 @@ public class InString {
         int i = 0;
         int sq_bracket = -1;
 
-
-        for (i = 0; i < inputBuffer.length; i++) {
-            if (inputBuffer[i].contains("[") && inputBuffer[i].contains("("))      //1번 case 경우
-            {
-                buffer.append("<a href=\"");
-
-                sq_bracket = inputBuffer[i].indexOf("]");
-                text_url = inputBuffer[i].substring(1, sq_bracket);         //[Hisnet] <-안의 내용
-
-                int parenth = inputBuffer[i].indexOf("(");
-                parenth_open = true;
-
-                String url = inputBuffer[i].substring(parenth + 1, inputBuffer[i].length());   // http://hisnet.handong.edu
-
-                buffer.append(url + "\" ");
-            }
-
-            if (inputBuffer[i].contains(")") && parenth_open == true)            //1번 case 경우
-            {
-                int quote = inputBuffer[i].substring(1, inputBuffer[i].length() - 1).indexOf("\"");
-
-                String title = inputBuffer[i].substring(1, quote + 1);
-                String rest = inputBuffer[i].substring(quote + 3);
-                buffer.append("title=\"" + title + "\">" + text_url + "</a>" + rest);
-            }
-
+		for(i = 0; i < inputBuffer.length; i++)
+       {             
+          if(inputBuffer[i].contains("[") && inputBuffer[i].contains("("))      //1번 case 경우
+          {
+		buffer.append("<p>");
+			for (int j = 0; j < i; j++)
+             {
+                buffer.append(inputBuffer[j] + " ");
+             }
+             buffer.append("<a href=\"");
+             
+             sq_bracket = inputBuffer[i].indexOf("]");
+             text_url = inputBuffer[i].substring(1, sq_bracket);         //[Hisnet] <-안의 내용
+             
+             int parenth = inputBuffer[i].indexOf("(");
+             parenth_open = true;
+             
+             String url = inputBuffer[i].substring(parenth + 1, inputBuffer[i].length());   // http://hisnet.handong.edu
+             
+             buffer.append(url + "\" ");
+          }
+          
+          if(inputBuffer[i].contains(")") && parenth_open == true)            //1번 case 경우
+          {
+             int quote = inputBuffer[i].substring(1, inputBuffer[i].length() - 1).indexOf("\"");
+             
+             String title = inputBuffer[i].substring(1, quote+1);
+             String rest = inputBuffer[i].substring(quote + 3);
+             buffer.append("title=\"" + title + "\">" + text_url + "</a>" + rest);
+             set_flag = true;
+          }
 
             if (inputBuffer[i].substring(1, inputBuffer[i].length() - 1).contains("["))         //2번 case경우
             {
