@@ -1,7 +1,7 @@
 import java.io.*;
 
 public class Converter {
-	private String buffer, splice_buffer, instring_buffer, result;
+	private String buffer, splice_buffer, instring_buffer, result, convertResult;
 	private StringBuffer return_write;
 	boolean doNeedInString, IsPrefixTest;
 	InString instring;
@@ -17,6 +17,7 @@ public class Converter {
 		splice_buffer = null;
 		instring_buffer = null;
 		result = null;
+		convertResult = null;
 		doNeedInString = true;
 		IsPrefixTest = false;
 		return_write = new StringBuffer();
@@ -58,7 +59,8 @@ public class Converter {
 			    // init buffers except var 'buffer'
 			    initBuffer();
 			    
-			    Convert(buffer);
+			    convertResult = Convert(buffer);
+			    System.out.println("convertResult :"+convertResult+"\n");
 
 			} // while
 			
@@ -69,11 +71,11 @@ public class Converter {
 			e.printStackTrace();
 		}
 	    
-	    System.out.println("This is error case in Converter");
+	    //System.out.println("This is error case in Converter");
 		return null;	
 	}
 	
-	public void Convert(String buffer){
+	public String Convert(String buffer){
 	    // Empty line
 	    if(buffer.length() == 0){
 	    	// check still lessthan state
@@ -82,22 +84,23 @@ public class Converter {
 				
 				// end signal of lessthan case
 				detectLessthan.setIsWhileChecking(false);
-				System.out.println("IsWhileChecking off");
+				//System.out.println("IsWhileChecking off");
 			}
 			// just empty line
 			else{
-				System.out.println("deal with Enter");
+				//System.out.println("deal with Enter");
 				result = "\n";
 			}
 	    	
 	    	// Append return_write
-			return_write.append(result + "\n");
+			return_write.append(result);
+			return result;
 	    }else{
 	    	// Prefix TEST -> get result now, do not need InString Test
 	    	// Line Check
 	    	if(detectLine.isLine(buffer)){
 	    		// here is in Line Case and do not need to do InString Test
-	    		System.out.println("Here is in line Detect");
+	    		//System.out.println("Here is in line Detect");
 	    		
 	    		doNeedInString = false;
 	    		IsPrefixTest = true;
@@ -106,11 +109,13 @@ public class Converter {
 	    		
 	    		// Append return_write
 				return_write.append(result + "\n");
+				
+				return result;
 	    	}
 	    	// Title Check
 	    	else if(detectTitle.isTitle(buffer) && !IsPrefixTest){
 	    		// here is in Title Case and do not need to do InString Test
-	    		System.out.println("Here is in Title Detect");
+	    		//System.out.println("Here is in Title Detect");
 			
 	    		doNeedInString = false;
 	    		IsPrefixTest = true;
@@ -119,11 +124,13 @@ public class Converter {
 	    		
 	    		// Append return_write
 				return_write.append(result + "\n");
+				
+				return result;
 	    	}
 	    	// Lessthan Check
 			else if(detectLessthan.isLessthan(buffer) && !IsPrefixTest){
 				// here is in Lessthan Case and do not need to do InString Test
-				System.out.println("Here is in Lessthan Detect");
+				//System.out.println("Here is in Lessthan Detect");
 			
 				doNeedInString = false;
 				IsPrefixTest = true;
@@ -132,13 +139,15 @@ public class Converter {
 				
 				// Append return_write
 				return_write.append(result + "\n");
+				
+				return result;
 			}
 	    	// BLOCK TEST -> need InString Test
 	    	else if(!IsPrefixTest){ 
 	    		// List Check
 	    		if(detectList.isList(buffer)){
 	    			// here is in List Case and need to do InString Test
-	    			System.out.println("Here is in list Detect");
+	    			//System.out.println("Here is in list Detect");
 			
 	    			doNeedInString = true;
 			
@@ -154,7 +163,7 @@ public class Converter {
 		
 	    		// InString Test only when doNeedInString is true
 	    		if(doNeedInString == true){
-	    			System.out.println("Here is InString Test");
+	    			//System.out.println("Here is InString Test");
 	    			// update result
 	    			//PrintBuffer();
 	    			
@@ -169,22 +178,26 @@ public class Converter {
 					}
 	    		}
 	
-	    		System.out.println("result :" + result);
-	    		System.out.println();
+	    		//System.out.println("result :" + result);
+	    		//System.out.println();
 		
 	    		// Append return_write
 	    		return_write.append(result + "\n");
 	
-	    		System.out.println("End Roop in block-instring-wrap");	
+	    		//System.out.println("End Roop in block-instring-wrap");
+	    		
+	    		return result;
 	    	// prefix case
 	    	}else{
-	    		System.out.println("prefix result :" + result);
-	    		System.out.println();
+	    		//System.out.println("prefix result :" + result);
+	    		//System.out.println();
 		
 	    		// Append return_write
 	    		return_write.append(result + "\n");
 	
-	    		System.out.println("End Roop in prefix");
+	    		//System.out.println("End Roop in prefix");
+	    		
+	    		return result;
 	    	}
 	    
 	    } // blank if condition
