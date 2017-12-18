@@ -1,4 +1,4 @@
-public class InStringTest {
+public class InString {
     boolean url_flag = false;         //만약 더러운 url이면 true. 아니면 false 유지
     String text_url;
     String number;
@@ -9,7 +9,7 @@ public class InStringTest {
     String resultString;
 
     //constructor
-    public InStringTest(String input) {
+    public InString(String input) {
         buffer = new StringBuffer();
     }
 

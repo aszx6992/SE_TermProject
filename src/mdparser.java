@@ -1,4 +1,4 @@
-
+import java.io.*;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -8,6 +8,10 @@ public class mdparser{
         LinkedList<String> options = new LinkedList<String>();
         LinkedList<String> mdFiles = new LinkedList<String>();
         LinkedList<String> htmlName = new LinkedList<String>();
+		Converter converter;
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
+		String[] result;
 
         String[] commands = {"-pl", "-st", "-sl","-h", "--help"};
 
@@ -50,15 +54,43 @@ public class mdparser{
                 System.exit(0);
             }
         }
+		
+		
 
-        for(int i=0; i < options.size(); i++){
-            System.out.println(options.get(i));
-        }
-
+	//Read file and convert
         for(int i=0; i < mdFiles.size(); i++){
-            System.out.print(mdFiles.get(i));
-            System.out.print("  ");
-            System.out.println(htmlName.get(i));
+			try {
+				File directory = new File(mdFiles.get(i));
+				reader = new BufferedReader(new FileReader(directory));
+				writer = new BufferedWriter(new FileWriter("../doc/" + htmlName.get(i)));
+
+				converter = new Converter(reader);
+				result = converter.run();
+
+				for(int j=0; j < result.length(); j++){
+					writer.write(result[j]);
+					writer.newline();
+				}
+				System.out.println("Created new file(s) at \'../doc/\'!");
+					
+			}
+			catch (IOException e) {
+				System.out.println("File cannot be found!");
+				e.printStackTrace();
+			}
+			finally {
+				try {
+					if(reader!=null) {
+						reader.close();
+					}
+					if(writer!=null) {
+						writer.close();
+					}
+				}
+				catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
         }
     }
 }
