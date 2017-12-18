@@ -86,4 +86,8 @@ public class mdparser {
             }
         }
     }
+	public int tester (int x) {
+		int num = x;
+		return num;
+	}
 }

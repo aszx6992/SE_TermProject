@@ -10,7 +10,7 @@ public class InString {
     String resultString;
 
     //constructor
-    public InString(String input) {
+    public InString() {
         buffer = new StringBuffer();
     }
 
