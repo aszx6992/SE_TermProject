@@ -12,8 +12,7 @@ public class mdparser {
         Converter converter;
         BufferedReader reader = null;
         BufferedWriter writer = null;
-        String[] result = null;
-	String line=null;
+        String result = null;
 
         String[] commands = {"-pl", "-st", "-sl", "-h", "--help"};
 
@@ -63,18 +62,10 @@ public class mdparser {
                 File directory = new File(mdFiles.get(i));
                 reader = new BufferedReader(new FileReader(directory));
                 writer = new BufferedWriter(new FileWriter("../doc/" + htmlName.get(i)));
-				int j =1;
                 converter = new Converter();
                 result = converter.run(reader);
-				line = result[0];
-				
-				//write file
-				while(line != null) {
-                    writer.write(line);
-                    writer.newLine();
-					j++;
-					line = result[j];
-                }
+
+                    writer.write(result);
 
                 System.out.println("Created new file(s) at \'../doc/\'!");
 
