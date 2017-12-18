@@ -6,7 +6,7 @@ public class Converter {
 	private int index;
 	boolean doNeedInString;
 	
-	public Converter(){
+	Converter(){
 		buffer = null;
 		splice_buffer = null;
 		instring_buffer = null;
@@ -32,7 +32,6 @@ public class Converter {
 		Prefix_DetectLine detectLine = new Prefix_DetectLine();
 		
 		// input reader
-		String curLine;
 	    BufferedReader reader = inputReader;
 
 	    try {
@@ -79,9 +78,12 @@ public class Converter {
 				// InString Test only when doNeedInString is true
 				if(doNeedInString == true){
 					// instring method is here
+					// instring_buffer = INSTRING_TEST(splice_buffer)
 					
 					// update result
-					instring_buffer = splice_buffer;
+					// just string without MD syntax
+					if(splice_buffer == null && result == null)
+						result = buffer;			
 				}
 			
 				
