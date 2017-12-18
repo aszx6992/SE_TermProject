@@ -22,7 +22,7 @@ A build and testing file for mdparser
   <javac includeantruntime="false" srcdir="${source.dir}" destdir="${classes.dir}"/>
 </target>
 
-<!--Test each class-->
+<!--Test each class via JUnit-->
 <target name="test" depends ="compile">
 	<junit showoutput="true" printsummary="on" enabletestlistenerevents="true" fork="true">
 		<classpath path="classes" />
@@ -38,6 +38,23 @@ A build and testing file for mdparser
 	</junit>
 </target>
 
+<!--Test each case with JCoco-->
+<target name="cov-test" depends ="build">
+	<jacoco:coverage>
+		<junit showoutput="true" printsummary="on" enabletestlistenerevents="true" fork="true">
+			<classpath path="classes" />
+			<classpath path="lib/junit.jar" />
+			<classpath path="lib/hamcrest-core.jar" />
+
+			<formatter type="plain" usefile="false" />
+
+			<fileset dir="${classes.dir}">
+				<filename name="mdParserTest">
+				<filename name="ConverterTest">
+				<filename name="InStringTest">
+			</fileset>
+		</junit>
+	</jacoco:coverage>
+</target>
 
 </project>
-
