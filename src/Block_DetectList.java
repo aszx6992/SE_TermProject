@@ -107,8 +107,17 @@ public class Block_DetectList {
 				this.nestedWithSymbol = true;
 				this.printBoolean();
 				return true;
-			}else{
-				// just nested
+			}
+			// tag case
+			else if(buffer.charAt(2) == '<'){
+				System.out.println("tag case.");
+				System.out.println("No case in nested test. maybe this is not line or list.");
+				this.initBoolean();
+				this.printBoolean();
+				return false;
+			}
+			// just nested.
+			else{
 				System.out.println("just nested");
 				this.initNestedBoolean();
 				this.justNested = true;
@@ -141,7 +150,7 @@ public class Block_DetectList {
 				&& this.getNestedWithSymbol() == false){
 			System.out.println("Splice buffer in just nested case");
 			this.listOption = 1;
-			return buffer.substring(4);
+			return buffer.substring(2);
 		}
 		// nested list with symbol
 		else if(this.getStillInList()  == true
@@ -171,7 +180,7 @@ public class Block_DetectList {
 			return result;
 		// just nested list
 		case 1 :
-			result = "<blockquote><p>" + instring_result + "</blockquote></p>";
+			result = "<blockquote><p>" + instring_result + "</p></blockquote>";
 			return result;
 		// nested list with symbol
 		case 2 :
@@ -179,7 +188,7 @@ public class Block_DetectList {
 			return result;
 		}
 		
-		System.out.println("Error case in transformToHTML");
+		System.out.println("Error case : transformToHTML method in Detect");
 		return "Error in transforming";
 	}
 	
