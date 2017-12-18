@@ -23,6 +23,12 @@ public class Converter {
 		this.IsPrefixTest = false;
 	}
 	
+	public void PrintBuffer(){
+		System.out.println("CURRENT BUFFER = splice:" + this.splice_buffer
+				+ ", instring:" + this.instring_buffer
+				+ ", result:" + this.result);
+	}
+	
 	public String run(BufferedReader inputReader){
 		// Test instance
 		Block_DetectList detectList = new Block_DetectList();
@@ -87,10 +93,13 @@ public class Converter {
 				
 			    		// InString Test only when doNeedInString is true
 			    		if(doNeedInString == true){
+			    			System.out.println("Here is InString Test");
+			    			
 			    			// instring method is here
 			    			// instring_buffer = INSTRING_TEST(splice_buffer)
 					
 			    			// update result
+			    			PrintBuffer();
 							// just string without MD syntax
 							if(splice_buffer != null && result == null)
 								instring_buffer = splice_buffer;
@@ -124,7 +133,7 @@ public class Converter {
 			    		System.out.println("End Roop");
 			    	}
 			    
-			    } // if condition
+			    } // blank if condition
 			} // while
 			
 			// return final result, return_write[]
