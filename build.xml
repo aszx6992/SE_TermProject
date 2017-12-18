@@ -17,6 +17,26 @@ A build and testing file for mdparser
 
 <!--Compile java code in &{src.dir} into ${classes.dir}-->
 <target name="compile" depends="init" description="compile java sources">
-  <javac includeantruntime="false" srcdir="${source.dir}" destdir="${classes.dir}"/>
+  <javac srcdir="${source.dir}" destdir="${classes.dir}" debug="true" includeantruntime="false" >
+		<classpath path="lib/junit.jar" />
+		<classpath path="lib/hamcrest-core.jar" />
+	</javac>
+</target>
+
+<target name="test" depends ="compile">
+		<junit showoutput="true" printsummary="on" enabletestlistenerevents="true" fork="true">
+			<classpath path="classes" />
+			<classpath path="lib/junit.jar" />
+			<classpath path="lib/hamcrest-core.jar" />
+
+			<formatter type="plain" usefile="false" />
+
+			<test name="mdparserTest">
+		</test>
+	</junit>
+</target>
+
+<target name="clean">
+	<delete dir="classes" />
 </target>
 </project>

@@ -19,8 +19,8 @@ public class mdparser {
         for (int i = 0; i < args.length; i++) {
             if (args[i].charAt(0) == '-') {
                 if (args[i].equals("-h") || args[i].equals("--help")) {
-                    System.out.println("This is the help message");
-                    System.exit(0);
+                    System.out.print("This is the help message");
+                    return;
                 }
 				else {
                 	options.add(args[i]);
@@ -36,7 +36,7 @@ public class mdparser {
                 }
             } else {
                 System.out.println("Please input a file extention of '.md' for conversion");
-                System.exit(0);
+		return;
             }
         }
 
@@ -51,7 +51,7 @@ public class mdparser {
             if (!flag) {
                 System.out.println("mdparser: invalid option -- " + "'" + options.get(i) + "'");
                 System.out.println("Try 'mdparser --help' for more information");
-                System.exit(0);
+                return;
             }
         }
 
