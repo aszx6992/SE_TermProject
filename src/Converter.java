@@ -113,14 +113,16 @@ public class Converter {
 							// just string without MD syntax
 							if(splice_buffer != null && result == null){
 								System.out.println("STRING TEST 1");
+								System.out.println(splice_buffer);
 								instring_buffer = instring.init(splice_buffer);
 							}
 							if(splice_buffer != null && result != null){
 								System.out.println("STRING TEST 2");
+								System.out.println(splice_buffer);
 								instring_buffer = instring.init(splice_buffer);
 							}
 							if(splice_buffer == null && result == null)
-								result = buffer;			
+								result = instring.init(buffer);
 			    		}
 			
 				
