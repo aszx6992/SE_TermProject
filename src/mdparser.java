@@ -21,7 +21,9 @@ public class mdparser {
                     System.out.println("This is the help message");
                     System.exit(0);
                 }
-                options.add(args[i]);
+				else {
+                	options.add(args[i]);
+				}
             } else if (args[i].substring(args[i].length() - 2).equals("md")) {
                 mdFiles.add(args[i]);
 
