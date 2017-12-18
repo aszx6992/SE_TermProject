@@ -1,4 +1,4 @@
-me="ConvSystem" default="compile" basedir=".">
+<project name="ConvSystem" default="compile" basedir=".">
 
 <description>
 A build and testing file for ConvSystem
@@ -16,7 +16,7 @@ A build and testing file for ConvSystem
 </target>
 <!--Compile java code in &{src.dir} into ${build.dir}-->
 <target name="compile" depends="init" description="compile java sources">
-  <javac srcdir="${source.dir}" destdir="${build.dir}"/>
+  <javac includeantruntime="false" srcdir="${source.dir}" destdir="${build.dir}"/>
 </target>
 
 
