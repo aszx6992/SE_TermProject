@@ -80,7 +80,7 @@ public class Converter {
 	    if(buffer.length() == 0){
 	    	// check still lessthan state
 			if(detectLessthan.getIsWhileChecking()){
-				result = "</blockquote>" + "\n";
+				result = "</blockquote>" + "<br>";
 				
 				// end signal of lessthan case
 				detectLessthan.setIsWhileChecking(false);
@@ -89,7 +89,7 @@ public class Converter {
 			// just empty line
 			else{
 				//System.out.println("deal with Enter");
-				result = "\n";
+				result = "<br>";
 			}
 	    	
 	    	// Append return_write
