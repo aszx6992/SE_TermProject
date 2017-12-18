@@ -37,77 +37,77 @@ public class Converter {
 			    // init buffers except var 'buffer'
 			    initBuffer();
 			    
-			    // Prefix TEST -> 바로 result나오는거. instring 필요없고.
-				// Enter Check
+			    // Empty line
 			    if(buffer.length() == 0){
 			    	// here is in Blank Case and do not need to do InString Test
 					System.out.println("Here is in Blank Detect");
+			    	result = "\n";
+			    	// Append return_write
+					return_write.append(result + "\n");
+			    }else{
+			    	// Prefix TEST -> 바로 result나오는거. instring 필요없고.
+			    	// Line Check
+			    	if(detectLine.isLine(buffer)){
+			    		// here is in Line Case and do not need to do InString Test
+			    		System.out.println("Here is in line Detect");
+			    		
+			    		doNeedInString = false;
 					
-					doNeedInString = false;
+			    		result = detectLine.transformToHTML();
+			    	}
+			    	// Title Check
+			    	else if(detectTitle.isTitle(buffer)){
+			    		// here is in Title Case and do not need to do InString Test
+			    		System.out.println("Here is in Title Detect");
 					
-					result = "\n";
-			    }
-			    // Line Check
-			    else if(detectLine.isLine(buffer)){
-					// here is in Line Case and do not need to do InString Test
-					System.out.println("Here is in line Detect");
-
-					doNeedInString = false;
+			    		doNeedInString = false;
 					
-					result = detectLine.transformToHTML();
-				}
-				// Title Check
-				else if(detectTitle.isTitle(buffer)){
-					// here is in Title Case and do not need to do InString Test
-					System.out.println("Here is in Title Detect");
+			    		result = detectTitle.transformToHTML(buffer, detectTitle.getSharpNum());
+			    	}
+			    	// BLOCK TEST -> instring test를 거쳐야 되는 거고.
+			    	// List Check
+			    	else if(detectList.isList(buffer)){
+			    		// here is in List Case and need to do InString Test
+			    		System.out.println("Here is in list Detect");
 					
-					doNeedInString = false;
+			    		doNeedInString = true;
 					
-					result = detectTitle.transformToHTML(buffer, detectTitle.getSharpNum());
-				}
-				// BLOCK TEST -> instring test를 거쳐야 되는 거고.
-				// List Check
-				else if(detectList.isList(buffer)){
-					// here is in List Case and need to do InString Test
-					System.out.println("Here is in list Detect");
+			    		// splice buffer and send it to InString Test
+			    		splice_buffer = detectList.spliceBuffer(buffer);
 					
-					doNeedInString = true;
-					
-					// splice buffer and send it to InString Test
-					splice_buffer = detectList.spliceBuffer(buffer);
-					
-					System.out.println("splice_buffer : " + splice_buffer);
-				}
+			    		System.out.println("splice_buffer : " + splice_buffer);
+			    	}
 				
 				
-				// InString Test only when doNeedInString is true
-				if(doNeedInString == true){
-					// instring method is here
-					// instring_buffer = INSTRING_TEST(splice_buffer)
+			    	// InString Test only when doNeedInString is true
+			    	if(doNeedInString == true){
+			    		// instring method is here
+			    		// instring_buffer = INSTRING_TEST(splice_buffer)
 					
-					// update result
-					// just string without MD syntax
-					if(splice_buffer != null && result == null)
-						result = splice_buffer;
-					if(splice_buffer == null && result == null)
-						result = buffer;			
-				}
+			    		// update result
+			    		// just string without MD syntax
+			    		if(splice_buffer != null && result == null)
+			    			result = splice_buffer;
+			    		if(splice_buffer == null && result == null)
+			    			result = buffer;			
+			    	}
 			
 				
-				// Block Test has to wrap after InString Test.
-				// List Wrapping
-				if(detectList.isList(buffer))
-					result = detectList.transformToHTML(instring_buffer, detectList.getListOption());
+			    	// Block Test has to wrap after InString Test.
+			    	// List Wrapping
+			    	if(detectList.isList(buffer))
+			    		result = detectList.transformToHTML(instring_buffer, detectList.getListOption());
 				
 			
-				System.out.println("result :" + result);
-				System.out.println();
+			    	System.out.println("result :" + result);
+			    	System.out.println();
 				
-				// Append return_write
-				return_write.append(result + "\n");
+			    	// Append return_write
+			    	return_write.append(result + "\n");
 			
-				System.out.println("End Roop");
-			}
+			    	System.out.println("End Roop");
+			    } // if condition
+			} // while
 			
 			// return final result, return_write[]
 			return return_write.toString();
