@@ -1,8 +1,13 @@
-<project name="ConvSystem" default="compile" basedir=".">
+<project name="mdparser" default="compile" basedir=".">
 
 <description>
-A build and testing file for ConvSystem
+A build and testing file for mdparser
 </description>
+
+<!--set up some directories used by this project-->
+<target name="init" description="setupt project directories">
+  <mkdir dir="classes"/>
+</target>
 
 <!--global properties for this build file -->
 <property name="source.dir" location="src"/>
@@ -10,15 +15,27 @@ A build and testing file for ConvSystem
 <property name="classes.dir" location="classes"/>
 
 
-<!--set up some directories used by this project-->
-<target name="init" description="setupt project directories">
-  <mkdir dir="${classes.dir}"/>
-</target>
-<!--Compile java code in &{src.dir} into ${build.dir}-->
+<!--Compile java code in &{src.dir} into ${classes.dir}-->
 <target name="compile" depends="init" description="compile java sources">
   <classpath path="lib/junit.jar" />
 	<classpath path="lib/hamcrest-core.jar" />
-  <javac includeantruntime="false" srcdir="${source.dir}" destdir="${build.dir}"/>
+  <javac includeantruntime="false" srcdir="${source.dir}" destdir="${classes.dir}"/>
+</target>
+
+<!--Test each class-->
+<target name="test" depends ="compile">
+	<junit showoutput="true" printsummary="on" enabletestlistenerevents="true" fork="true">
+		<classpath path="classes" />
+		<classpath path="lib/junit.jar" />
+		<classpath path="lib/hamcrest-core.jar" />
+
+		<formatter type="plain" usefile="false" />
+		<fileset dir="${classes.dir}">
+			<filename name="mdParserTest">
+			<filename name="ConverterTest">
+			<filename name="InStringTest">
+		</fileset>
+	</junit>
 </target>
 
 
