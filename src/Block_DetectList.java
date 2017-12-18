@@ -85,7 +85,7 @@ public class Block_DetectList {
 		}
 		// return true if case '-'
 		else if(buffer.charAt(0) == '-'){
-			// ë¼ì¸ ì²´í¬ì—ì„œ ì´ë¯¸ '---'ì™€ '- -'ë¥¼ ê±¸ë €ê¸° ë•Œë¬¸ì— ë¬´ì¡°ê±´ ë¦¬ìŠ¤íŠ¸ì„.
+			// ¶óÀÎ Ã¼Å©¿¡¼­ ÀÌ¹Ì '---'¿Í '- -'¸¦ °É·¶±â ¶§¹®¿¡ ¹«Á¶°Ç ¸®½ºÆ®ÀÓ.
 			System.out.println("List : " + buffer.charAt(0));
 			this.initBoolean();
 			this.stillInList = true;
@@ -104,6 +104,7 @@ public class Block_DetectList {
 				// nested with symbol
 				System.out.println("nested with symbol : " + buffer.charAt(2));
 				this.initNestedBoolean();
+				this.stillInList = true;
 				this.nestedWithSymbol = true;
 				this.printBoolean();
 				return true;
@@ -120,6 +121,7 @@ public class Block_DetectList {
 			else{
 				System.out.println("just nested");
 				this.initNestedBoolean();
+				this.stillInList = true;
 				this.justNested = true;
 				this.printBoolean();
 				return true;

@@ -6,7 +6,6 @@ public class Prefix_DetectLessthan {
 	  
 	Prefix_DetectLessthan(){
 		result = "";
-		isWhileChecking = false;
 		opt = -1;
 	}
 	
@@ -23,6 +22,7 @@ public class Prefix_DetectLessthan {
 	}
 	
 	public boolean isLessthan(String buffer){
+		System.out.println("Checking state:"+this.isWhileChecking);
 		// recognize '>' and continuing tag is on
 		if(this.isWhileChecking==false && buffer.charAt(0) == '>'){
 			this.opt = 3;
