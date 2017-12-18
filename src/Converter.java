@@ -78,6 +78,9 @@ public class Converter {
 			    		IsPrefixTest = true;
 					
 			    		result = detectTitle.transformToHTML(buffer, detectTitle.getSharpNum());
+			    		
+			    		// Append return_write
+						return_write.append(result + "\n");
 			    	}
 			    	// BLOCK TEST -> instring test를 거쳐야 되는 거고.
 			    	else if(!IsPrefixTest){ 
