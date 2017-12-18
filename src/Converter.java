@@ -36,6 +36,7 @@ public class Converter {
 		Block_DetectList detectList = new Block_DetectList();
 		Prefix_DetectTitle detectTitle = new Prefix_DetectTitle();
 		Prefix_DetectLine detectLine = new Prefix_DetectLine();
+		Prefix_DetectLessthan detectLessthan = new Prefix_DetectLessthan();
 		
 		// input reader
 	    BufferedReader reader = inputReader;
@@ -50,9 +51,18 @@ public class Converter {
 			    
 			    // Empty line
 			    if(buffer.length() == 0){
-			    	// here is in Blank Case and do not need to do InString Test
-					System.out.println("Here is in Blank Detect");
-			    	result = "\n";
+			    	// check still lessthan state
+					if(detectLessthan.getIsWhileChecking()){
+						result = "</blockquote>" + "\n";
+						
+						// end signal of lessthan case
+						detectLessthan.setIsWhileChecking(false);
+					}
+					// just empty line
+					else{
+						System.out.println("deal with Enter");
+						result = "\n";
+					}
 			    	
 			    	// Append return_write
 					return_write.append(result + "\n");
@@ -84,6 +94,16 @@ public class Converter {
 			    		// Append return_write
 						return_write.append(result + "\n");
 			    	}
+			    	// Lessthan Check
+				else if(detectLessthan.isLessthan(buffer) && !IsPrefixTest){
+					// here is in Lessthan Case and do not need to do InString Test
+					System.out.println("Here is in Lessthan Detect");
+					
+					doNeedInString = false;
+					IsPrefixTest = true;
+					
+					result = detectLessthan.transformToHTML(buffer, detectLessthan.getOpt());
+				}
 			    	// BLOCK TEST -> instring test를 거쳐야 되는 거고.
 			    	else if(!IsPrefixTest){ 
 			    		// List Check
@@ -106,10 +126,6 @@ public class Converter {
 			    		// InString Test only when doNeedInString is true
 			    		if(doNeedInString == true){
 			    			System.out.println("Here is InString Test");
-			    			
-			    			// instring method is here
-			    			// instring_buffer = INSTRING_TEST(splice_buffer)
-					
 			    			// update result
 			    			//PrintBuffer();
 			    			
@@ -128,20 +144,13 @@ public class Converter {
 							}
 			    		}
 			
-				
-			    		// Block Test has to wrap after InString Test.
-			    		// List Wrapping
-			    		//if(detectList.isList(buffer))
-			    			//result = detectList.transformToHTML(instring_buffer, detectList.getListOption());
-			    		
 			    		System.out.println("result :" + result);
 			    		System.out.println();
 				
 			    		// Append return_write
 			    		return_write.append(result + "\n");
 			
-			    		System.out.println("End Roop in block-instring-wrap");
-				
+			    		System.out.println("End Roop in block-instring-wrap");	
 			    	}else{
 			    		System.out.println("prefix result :" + result);
 			    		System.out.println();
