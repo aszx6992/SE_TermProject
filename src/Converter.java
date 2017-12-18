@@ -2,8 +2,7 @@ import java.io.*;
 
 public class Converter {
 	private String buffer, splice_buffer, instring_buffer, result;
-	private String[] return_write;
-	private int index;
+	private StringBuffer return_write;
 	boolean doNeedInString;
 	
 	Converter(){
@@ -12,11 +11,7 @@ public class Converter {
 		instring_buffer = null;
 		result = null;
 		doNeedInString = true;
-		index = 0;
-	}
-	
-	public int getIndexInClass(){
-		return this.index;
+		return_write = new StringBuffer();
 	}
 	
 	public void initBuffer(){
@@ -25,7 +20,7 @@ public class Converter {
 		this.result = null;
 	}
 	
-	public String[] run(BufferedReader inputReader){
+	public String run(BufferedReader inputReader){
 		// Test instance
 		Block_DetectList detectList = new Block_DetectList();
 		Prefix_DetectTitle detectTitle = new Prefix_DetectTitle();
@@ -33,7 +28,8 @@ public class Converter {
 		
 		// input reader
 	    BufferedReader reader = inputReader;
-
+	    
+	   
 	    try {
 			while ((buffer = reader.readLine()) != null) {
 			    System.out.println(buffer);
@@ -99,13 +95,13 @@ public class Converter {
 				System.out.println();
 				
 				// Append return_write
-				return_write[getIndexInClass()] = result;
-				this.index++;
+				return_write.append(result + "\n");
+			
 				System.out.println("End Roop");
 			}
 			
 			// return final result, return_write[]
-			return return_write;
+			return return_write.toString();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
