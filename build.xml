@@ -1,0 +1,24 @@
+me="ConvSystem" default="compile" basedir=".">
+
+<description>
+A build and testing file for ConvSystem
+</description>
+
+<!--global properties for this build file -->
+<property name="source.dir" location="src"/>
+<property name="build.dir" location="bin"/>
+<property name="doc.dir" location="doc"/>
+
+<!--set up some directories used by this project-->
+<target name="init" description="setupt project directories">
+  <mkdir dir="${build.dir}"/>
+  <mkdir dir="${doc.dir}"/>
+</target>
+<!--Compile java code in &{src.dir} into ${build.dir}-->
+<target name="compile" depends="init" description="compile java sources">
+  <javac srcdir="${source.dir}" destdir="${build.dir}"/>
+</target>
+
+
+</project>
+
