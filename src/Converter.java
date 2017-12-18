@@ -195,6 +195,7 @@ public class Converter {
 					}
 					if(splice_buffer == null && result == null){
 						System.out.println("STRING TEST 2");
+						buffer = "<p>"+buffer+"</p>";
 						result = instring.init(buffer);			
 					}
 	    		}
