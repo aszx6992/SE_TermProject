@@ -35,8 +35,8 @@ public class InString {
                 convImage(inputBuffer[i]);
             } else if (inputBuffer[i].charAt(0) == '[') {
                 convUrl(inputBuffer);
-			} else if (inputBuffer[i].charAt(0) == '&') {
-				convSpecial (inputBuffer[i]);
+			} else if (inputBuffer[i].charAt(0) == '&' && inputBuffer[i].length() == 1) {
+				convSpecial(inputBuffer[i]);
             } else {
                 buffer.append(inputBuffer[i] + " ");
             }
