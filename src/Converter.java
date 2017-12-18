@@ -114,7 +114,7 @@ public class Converter {
 			}
 	    	
 	    	// Append return_write
-			return_write.append(result);
+			return_write.append(result + "\n");
 			return result;
 	    }else{
 	    	// Prefix TEST -> get result now, do not need InString Test
