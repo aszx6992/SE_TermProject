@@ -12,6 +12,8 @@ public class InString {
     String[] inputBuffer;
     String resultString;
 
+	private String ref;
+
     //constructor
     public InString() {
         buffer = new StringBuffer();
@@ -37,7 +39,14 @@ public class InString {
             } else if (inputBuffer[i].charAt(0) == '!') {
                 convImage(inputBuffer[i]);
             } else if (inputBuffer[i].charAt(0) == '[') {
-                convUrl(inputBuffer);
+                int type = whatURL(inputBuffer[i]);
+                if (type == 0)
+                    convUrl(inputBuffer);
+                else if (type == -1) {
+                    convRefURL(inputBuffer);
+                    break;
+                } else
+                    convMarkerURL(inputBuffer[i]);
 			} else if (inputBuffer[i].charAt(0) == '&' && inputBuffer[i].length() == 1) {
 				convSpecial(inputBuffer[i]);
             } else {
@@ -142,6 +151,37 @@ private void convCode(String[] inputBuffer)
         //add to StringBuffer buffer
     }
 
+    private void convMarkerURL(String inputBuffer) {
+        String word;
+        String title ="";
+        String ref ="";
+        int index =0;
+        while(inputBuffer.charAt(index) != ']'){
+            title = title + inputBuffer.charAt(index);
+            index++;
+        }
+        title = title + "#";
+
+        index ++;
+
+        while(inputBuffer.charAt(index) != ']') {
+            ref = ref + inputBuffer.charAt(index);
+            index ++;
+        }
+
+        ref = ref + "]";
+        word = ref + title;
+        buffer.append(word + " ");
+    }
+
+    private void convRefURL(String[] inputBuffer) {
+        String add = inputBuffer[1];
+        String title = inputBuffer[2].substring(1, inputBuffer[2].length()-1);
+        String word = "<a href=\""+add+"\" title=\"" + title + "\">";
+        buffer.append(word);
+        ref = inputBuffer[0].substring(0, inputBuffer[0].length()-1);
+    }
+
     private void convUrl(String[] inputBuffer) {
         buffer = new StringBuffer();
 
@@ -218,6 +258,27 @@ private void convCode(String[] inputBuffer)
                 url_flag = false;
             }
         }
+    }
+
+    //checks for what type of URL
+    private int whatURL(String word){
+        int index =0;
+
+        while(word.charAt(index) != ']')
+            index++;
+        if(word.charAt(index+1) == '[')
+            return 1;                   //URL calling for reference URL
+        else if(word.charAt(index+1) == ':')
+            return -1;                  //reference URL (at the end of file)
+
+        return 0;                       //regular URL
+    }
+
+    public String getRef () {
+        return ref;
+    }
+    public void resetRef() {
+        ref = null;
     }
 
     private boolean get_url() {

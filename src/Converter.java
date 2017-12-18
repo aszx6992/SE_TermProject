@@ -46,6 +46,27 @@ public class Converter {
 				+ ", instring:" + this.instring_buffer
 				+ ", result:" + this.result);
 	}
+
+	//finds the place where the Marker URL is and replaces it with correct html code
+	private void EditURL (String ref) {
+		String word, link="";
+		int index, start, end;
+
+		index = return_write.lastIndexOf(instring.getRef());
+		start = index;
+		end = index+4;
+
+		while(return_write.charAt(end) != '#') {
+			link = link + return_write.charAt(end);
+			end++;
+		}
+
+		word = ref + link + "</a>";
+
+		return_write.replace(start, end+1, word);
+
+		instring.resetRef();
+	}
 	
 	public String run(BufferedReader inputReader){	
 		// input reader
@@ -181,9 +202,13 @@ public class Converter {
 	    		//System.out.println("result :" + result);
 	    		//System.out.println();
 		
-	    		// Append return_write
-	    		return_write.append(result + "\n");
-	
+			if(instring.getRef() == null) {
+				// Append return_write
+				return_write.append(result + "\n");
+			}
+			else {
+			    	EditURL(result);
+			}	
 	    		//System.out.println("End Roop in block-instring-wrap");
 	    		
 	    		return result;
