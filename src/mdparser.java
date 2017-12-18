@@ -3,7 +3,7 @@ import java.util.LinkedList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class ConvSystem {
+public class mdparser{
     public static void main (String args[]){
         LinkedList<String> options = new LinkedList<String>();
         LinkedList<String> mdFiles = new LinkedList<String>();
