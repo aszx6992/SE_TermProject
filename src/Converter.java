@@ -38,8 +38,17 @@ public class Converter {
 			    initBuffer();
 			    
 			    // Prefix TEST -> 바로 result나오는거. instring 필요없고.
-				// Line Check
-				if(detectLine.isLine(buffer)){
+				// Enter Check
+			    if(buffer.length() == 0){
+			    	// here is in Blank Case and do not need to do InString Test
+					System.out.println("Here is in Blank Detect");
+					
+					doNeedInString = false;
+					
+					result = "\n";
+			    }
+			    // Line Check
+			    else if(detectLine.isLine(buffer)){
 					// here is in Line Case and do not need to do InString Test
 					System.out.println("Here is in line Detect");
 
