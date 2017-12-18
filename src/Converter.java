@@ -121,16 +121,16 @@ public class Converter {
 			    		// Append return_write
 			    		return_write.append(result + "\n");
 			
-			    		System.out.println("End Roop");
+			    		System.out.println("End Roop in block-instring-wrap");
 				
 			    	}else{
-			    		System.out.println("result :" + result);
+			    		System.out.println("prefix result :" + result);
 			    		System.out.println();
 				
 			    		// Append return_write
 			    		return_write.append(result + "\n");
 			
-			    		System.out.println("End Roop");
+			    		System.out.println("End Roop in prefix");
 			    	}
 			    
 			    } // blank if condition
