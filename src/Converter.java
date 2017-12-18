@@ -95,6 +95,9 @@ public class Converter {
 					
 			    			// splice buffer and send it to InString Test
 			    			splice_buffer = detectList.spliceBuffer(buffer);
+			    			
+			    			// transform to html
+			    			splice_buffer = detectList.transformToHTML(splice_buffer, detectList.getListOption());
 					
 			    			System.out.println("splice_buffer : " + splice_buffer);
 			    		}
@@ -113,23 +116,23 @@ public class Converter {
 							// just string without MD syntax
 							if(splice_buffer != null && result == null){
 								System.out.println("STRING TEST 1");
-								System.out.println(splice_buffer);
-								instring_buffer = instring.init(splice_buffer);
+								result = instring.init(splice_buffer);
 							}
 							if(splice_buffer != null && result != null){
 								System.out.println("STRING TEST 2");
-								System.out.println(splice_buffer);
-								instring_buffer = instring.init(splice_buffer);
+								result = instring.init(splice_buffer);
 							}
-							if(splice_buffer == null && result == null)
-								result = instring.init(buffer);
+							if(splice_buffer == null && result == null){
+								System.out.println("STRING TEST 3");
+								result = instring.init(buffer);			
+							}
 			    		}
 			
 				
 			    		// Block Test has to wrap after InString Test.
 			    		// List Wrapping
-			    		if(detectList.isList(buffer))
-			    			result = detectList.transformToHTML(instring_buffer, detectList.getListOption());
+			    		//if(detectList.isList(buffer))
+			    			//result = detectList.transformToHTML(instring_buffer, detectList.getListOption());
 			    		
 			    		System.out.println("result :" + result);
 			    		System.out.println();
@@ -163,4 +166,3 @@ public class Converter {
 		return null;	
 	}
 }
-
