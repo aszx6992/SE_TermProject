@@ -108,12 +108,21 @@ public class Converter {
 			    			// instring_buffer = INSTRING_TEST(splice_buffer)
 					
 			    			// update result
-			    			PrintBuffer();
+			    			//PrintBuffer();
+			    			
 							// just string without MD syntax
 							if(splice_buffer != null && result == null)
 								instring_buffer = instring.init(splice_buffer);
 							if(splice_buffer != null && result != null)
 								instring_buffer = instring.init(splice_buffer);
+							if(splice_buffer != null && result == null){
+								System.out.println("STRING TEST 1");
+								instring_buffer = instring.init(splice_buffer);
+							}
+							if(splice_buffer != null && result != null){
+								System.out.println("STRING TEST 2");
+								instring_buffer = instring.init(splice_buffer);
+							}
 							if(splice_buffer == null && result == null)
 								result = buffer;			
 			    		}
