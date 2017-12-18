@@ -193,7 +193,6 @@ private void convCode(String[] inputBuffer)
        {             
           if(inputBuffer[i].contains("[") && inputBuffer[i].contains("("))      //1번 case 경우
           {
-		buffer.append("<p>");
 			for (int j = 0; j < i; j++)
              {
                 buffer.append(inputBuffer[j] + " ");
