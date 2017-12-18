@@ -51,6 +51,7 @@ public class Converter {
 			    	// here is in Blank Case and do not need to do InString Test
 					System.out.println("Here is in Blank Detect");
 			    	result = "\n";
+			    	
 			    	// Append return_write
 					return_write.append(result + "\n");
 			    }else{
@@ -64,6 +65,9 @@ public class Converter {
 			    		IsPrefixTest = true;
 			    		
 			    		result = detectLine.transformToHTML();
+			    		
+			    		// Append return_write
+						return_write.append(result + "\n");
 			    	}
 			    	// Title Check
 			    	else if(detectTitle.isTitle(buffer) && !IsPrefixTest){
