@@ -27,6 +27,7 @@ public class Prefix_DetectLessthan {
 		if(this.isWhileChecking==false && buffer.charAt(0) == '>'){
 			this.opt = 3;
 			this.isWhileChecking = true;
+			System.out.println("isWhileChecking on");
 			return true;
 		}
 		// if continuing tag is on, check whether it still in lessthan state or not. 
@@ -52,7 +53,6 @@ public class Prefix_DetectLessthan {
 	            return "<p>"+buffer+"</p>";
 	            
 	         case 3 :
-	            this.isWhileChecking = true;
 	            return "<blockquote>"+buffer.substring(1,buffer.length());
 	                     
 	      }

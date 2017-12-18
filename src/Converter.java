@@ -57,6 +57,7 @@ public class Converter {
 						
 						// end signal of lessthan case
 						detectLessthan.setIsWhileChecking(false);
+						System.out.println("IsWhileChecking off");
 					}
 					// just empty line
 					else{
@@ -67,7 +68,7 @@ public class Converter {
 			    	// Append return_write
 					return_write.append(result + "\n");
 			    }else{
-			    	// Prefix TEST -> ë°”ë¡œ resultë‚˜ì˜¤ëŠ”ê±°. instring í•„ìš”ì—†ê³ .
+			    	// Prefix TEST -> ¹Ù·Î result³ª¿À´Â°Å. instring ÇÊ¿ä¾ø°í.
 			    	// Line Check
 			    	if(detectLine.isLine(buffer)){
 			    		// here is in Line Case and do not need to do InString Test
@@ -95,16 +96,19 @@ public class Converter {
 						return_write.append(result + "\n");
 			    	}
 			    	// Lessthan Check
-				else if(detectLessthan.isLessthan(buffer) && !IsPrefixTest){
-					// here is in Lessthan Case and do not need to do InString Test
-					System.out.println("Here is in Lessthan Detect");
+					else if(detectLessthan.isLessthan(buffer) && !IsPrefixTest){
+						// here is in Lessthan Case and do not need to do InString Test
+						System.out.println("Here is in Lessthan Detect");
 					
-					doNeedInString = false;
-					IsPrefixTest = true;
+						doNeedInString = false;
+						IsPrefixTest = true;
 					
-					result = detectLessthan.transformToHTML(buffer, detectLessthan.getOpt());
-				}
-			    	// BLOCK TEST -> instring testë¥¼ ê±°ì³ì•¼ ë˜ëŠ” ê±°ê³ .
+						result = detectLessthan.transformToHTML(buffer, detectLessthan.getOpt());
+						
+						// Append return_write
+						return_write.append(result + "\n");
+					}
+			    	// BLOCK TEST -> instring test¸¦ °ÅÃÄ¾ß µÇ´Â °Å°í.
 			    	else if(!IsPrefixTest){ 
 			    		// List Check
 			    		if(detectList.isList(buffer)){
@@ -151,6 +155,7 @@ public class Converter {
 			    		return_write.append(result + "\n");
 			
 			    		System.out.println("End Roop in block-instring-wrap");	
+			    	// prefix case
 			    	}else{
 			    		System.out.println("prefix result :" + result);
 			    		System.out.println();
