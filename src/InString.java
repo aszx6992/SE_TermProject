@@ -31,12 +31,12 @@ public class InString {
                 }
             } else if (inputBuffer[i].charAt(0) == '`') {
                 convCode(inputBuffer);
-            } else if (inputBuffer[i].charAt(0) == '&') {
-                convSpecial(inputBuffer[i]);
             } else if (inputBuffer[i].charAt(0) == '!') {
                 convImage(inputBuffer[i]);
             } else if (inputBuffer[i].charAt(0) == '[') {
                 convUrl(inputBuffer);
+			} else if (inputBuffer[i].charAt(0) == '&') {
+				convSpecial (inputBuffer[i]);
             } else {
                 buffer.append(inputBuffer[i] + " ");
             }
@@ -49,6 +49,12 @@ public class InString {
 
         return resultString;
     }
+
+	private void convSpecial(String inputBuffer) {
+		String word;
+		word = inputBuffer + "amp;";
+		buffer.append(word + " ");
+	}
 
     private void convBold(String inputBuffer) {
         String word;
@@ -79,17 +85,6 @@ public class InString {
         word = "<img src=\"" + ref + "\" alt=\"" + tag + "\">";
 
         //add to StringBuffer buffer
-        buffer.append(word + " ");
-    }
-
-    private void convSpecial(String inputBuffer) {
-        String word;
-        if(inputBuffer.substring(1, 5).equals("amp;")) {
-            word = "&";
-        }
-        else
-            word = inputBuffer;
-
         buffer.append(word + " ");
     }
 
