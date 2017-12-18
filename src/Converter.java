@@ -4,6 +4,7 @@ public class Converter {
 	private String buffer, splice_buffer, instring_buffer, result;
 	private StringBuffer return_write;
 	boolean doNeedInString, IsPrefixTest;
+	InString instring;
 	
 	Converter(){
 		buffer = null;
@@ -13,6 +14,7 @@ public class Converter {
 		doNeedInString = true;
 		IsPrefixTest = false;
 		return_write = new StringBuffer();
+		instring = new InString();
 	}
 	
 	public void initBuffer(){
@@ -106,12 +108,17 @@ public class Converter {
 			    			// instring_buffer = INSTRING_TEST(splice_buffer)
 					
 			    			// update result
-			    			PrintBuffer();
+			    			//PrintBuffer();
+			    			
 							// just string without MD syntax
-							if(splice_buffer != null && result == null)
-								instring_buffer = splice_buffer;
-							if(splice_buffer != null && result != null)
-								instring_buffer = splice_buffer;
+							if(splice_buffer != null && result == null){
+								System.out.println("STRING TEST 1");
+								instring_buffer = instring.init(splice_buffer);
+							}
+							if(splice_buffer != null && result != null){
+								System.out.println("STRING TEST 2");
+								instring_buffer = instring.init(splice_buffer);
+							}
 							if(splice_buffer == null && result == null)
 								result = buffer;			
 			    		}
