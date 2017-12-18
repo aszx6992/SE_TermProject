@@ -12,6 +12,9 @@ private int sharpNum;
 	
 	// check whether 'buffer' is title or not
 	public boolean isTitle(String buffer){
+		// init sharpNum
+		sharpNum =0;
+		
 		// return true in cases of line, such as series of '#'. 
 		if(buffer.charAt(0) == '#'){
 			sharpNum++;
