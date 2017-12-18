@@ -46,8 +46,8 @@ public class mdparser {
                 }
             }
             if (!flag) {
-                System.out.println("ConvSystem: invalid option -- " + "'" + options.get(i) + "'");
-                System.out.println("Try 'ConvSystem --help' for more information");
+                System.out.println("mdparser: invalid option -- " + "'" + options.get(i) + "'");
+                System.out.println("Try 'mdparser --help' for more information");
                 System.exit(0);
             }
         }
