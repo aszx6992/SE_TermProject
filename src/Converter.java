@@ -82,6 +82,8 @@ public class Converter {
 					
 					// update result
 					// just string without MD syntax
+					if(splice_buffer != null && result == null)
+						result = splice_buffer;
 					if(splice_buffer == null && result == null)
 						result = buffer;			
 				}
