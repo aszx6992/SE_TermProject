@@ -93,7 +93,7 @@ public class Converter {
 	    	// Append return_write
 			return_write.append(result + "\n");
 	    }else{
-	    	// Prefix TEST -> 바로 result나오는거. instring 필요없고.
+	    	// Prefix TEST -> get result now, do not need InString Test
 	    	// Line Check
 	    	if(detectLine.isLine(buffer)){
 	    		// here is in Line Case and do not need to do InString Test
@@ -133,7 +133,7 @@ public class Converter {
 				// Append return_write
 				return_write.append(result + "\n");
 			}
-	    	// BLOCK TEST -> instring test를 거쳐야 되는 거고.
+	    	// BLOCK TEST -> need InString Test
 	    	else if(!IsPrefixTest){ 
 	    		// List Check
 	    		if(detectList.isList(buffer)){

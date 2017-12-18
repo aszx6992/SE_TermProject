@@ -85,7 +85,6 @@ public class Block_DetectList {
 		}
 		// return true if case '-'
 		else if(buffer.charAt(0) == '-'){
-			// 라인 체크에서 이미 '---'와 '- -'를 걸렀기 때문에 무조건 리스트임.
 			System.out.println("List : " + buffer.charAt(0));
 			this.initBoolean();
 			this.stillInList = true;
