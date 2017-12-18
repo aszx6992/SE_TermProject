@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Arrays;
 
 public class mdparser {
     public static void main(String args[]) {
@@ -11,7 +12,8 @@ public class mdparser {
         Converter converter;
         BufferedReader reader = null;
         BufferedWriter writer = null;
-        String[] result;
+        String[] result = null;
+	String line=null;
 
         String[] commands = {"-pl", "-st", "-sl", "-h", "--help"};
 
@@ -61,14 +63,19 @@ public class mdparser {
                 File directory = new File(mdFiles.get(i));
                 reader = new BufferedReader(new FileReader(directory));
                 writer = new BufferedWriter(new FileWriter("../doc/" + htmlName.get(i)));
-
-                converter = new Converter(reader);
-                result = converter.run();
-
-                for (int j = 0; j < result.length(); j++) {
-                    writer.write(result[j]);
-                    writer.newline();
+				int j =1;
+                converter = new Converter();
+                result = converter.run(reader);
+				line = result[0];
+				
+				//write file
+				while(line != null) {
+                    writer.write(line);
+                    writer.newLine();
+					j++;
+					line = result[j];
                 }
+
                 System.out.println("Created new file(s) at \'../doc/\'!");
 
             } catch (IOException e) {

@@ -5,7 +5,7 @@ A build and testing file for mdparser
 </description>
 
 <!--set up some directories used by this project-->
-<target name="init" description="setupt project directories">
+<target name="init" description="setup project directories">
   <mkdir dir="classes"/>
 </target>
 
@@ -17,44 +17,6 @@ A build and testing file for mdparser
 
 <!--Compile java code in &{src.dir} into ${classes.dir}-->
 <target name="compile" depends="init" description="compile java sources">
-  <classpath path="lib/junit.jar" />
-	<classpath path="lib/hamcrest-core.jar" />
   <javac includeantruntime="false" srcdir="${source.dir}" destdir="${classes.dir}"/>
 </target>
-
-<!--Test each class via JUnit-->
-<target name="test" depends ="compile">
-	<junit showoutput="true" printsummary="on" enabletestlistenerevents="true" fork="true">
-		<classpath path="classes" />
-		<classpath path="lib/junit.jar" />
-		<classpath path="lib/hamcrest-core.jar" />
-
-		<formatter type="plain" usefile="false" />
-		<fileset dir="${classes.dir}">
-			<filename name="mdParserTest">
-			<filename name="ConverterTest">
-			<filename name="InStringTest">
-		</fileset>
-	</junit>
-</target>
-
-<!--Test each case with JCoco-->
-<target name="cov-test" depends ="build">
-	<jacoco:coverage>
-		<junit showoutput="true" printsummary="on" enabletestlistenerevents="true" fork="true">
-			<classpath path="classes" />
-			<classpath path="lib/junit.jar" />
-			<classpath path="lib/hamcrest-core.jar" />
-
-			<formatter type="plain" usefile="false" />
-
-			<fileset dir="${classes.dir}">
-				<filename name="mdParserTest">
-				<filename name="ConverterTest">
-				<filename name="InStringTest">
-			</fileset>
-		</junit>
-	</jacoco:coverage>
-</target>
-
 </project>

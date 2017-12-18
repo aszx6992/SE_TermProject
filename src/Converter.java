@@ -6,7 +6,7 @@ public class Converter {
 	private int index;
 	boolean doNeedInString;
 	
-	Converter(){
+	public Converter(){
 		buffer = null;
 		splice_buffer = null;
 		instring_buffer = null;
