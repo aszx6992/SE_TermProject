@@ -1,6 +1,3 @@
-
-import org.jetbrains.annotations.NotNull;
-
 import java.io.*;
 import java.nio.Buffer;
 
@@ -272,7 +269,6 @@ public class Converter {
 	}
 
 	//receives a plain text string, convert markdown syntax, wraps in <p> </p>
-	@NotNull
 	private String convertPlainText () {
 		StringBuffer plainTextBuffer = new StringBuffer();
 		String buffer;
