@@ -20,7 +20,58 @@ public class ConverterTest {
 		assertEquals("<hr>\n", converter.convert(tc3));
 		
 		// test4 : lists
-		String[] tc4 = {"* Markdown supports ordered (numbered) and unordered (bulleted) lists."
+		// normal + normal
+		String[] tc4_1 ={"* Markdown supports ordered (numbered) and unordered (bulleted) lists."
+				,"* It¡¯s important to note that the actual numbers you use to mark the list have"
+		};
+		converter.init();
+		assertEquals("<ul>\n"
+				+ "<li>Markdown supports ordered (numbered) and unordered (bulleted) lists.</li>\n"
+				+ "<li>It¡¯s important to note that the actual numbers you use to mark the list have</li>\n"
+				+ "</ul>\n\n",converter.convert(tc4_1));
+		
+		// normal + nested
+		String[] tc4_2 ={"* Markdown supports ordered (numbered) and unordered (bulleted) lists."
+				,"  * It¡¯s important to note that the actual numbers you use to mark the list have"
+		};
+		converter.init();
+		assertEquals("<ul>\n"
+				+ "<li>Markdown supports ordered (numbered) and unordered (bulleted) lists.\n"
+				+ "<ul>\n"
+				+ "<li>It¡¯s important to note that the actual numbers you use to mark the list have</li>\n"
+				+ "</ul>\n"
+				+ "</li>\n"
+				+ "</ul>\n\n", converter.convert(tc4_2));
+		
+		// normal + nested + normal
+		String[] tc4_3 = {"* Markdown supports ordered (numbered) and unordered (bulleted) lists."
+				,"  * It¡¯s important to note that the actual numbers you use to mark the list have"
+				,"* If you instead wrote the list in Markdown like this"
+		};
+		converter.init();
+		assertEquals("<ul>\n"
+				+"<li>Markdown supports ordered (numbered) and unordered (bulleted) lists.\n"
+				+"<ul>\n"
+				+"<li>It¡¯s important to note that the actual numbers you use to mark the list have</li>\n"
+				+"</ul>\n"
+				+"</li>\n"
+				+"<li>If you instead wrote the list in Markdown like this</li>\n"
+				+"</ul>\n\n", converter.convert(tc4_3));
+		
+		// normal + indent + normal
+		String[] tc4_4 ={"* Markdown supports ordered (numbered) and unordered (bulleted) lists."
+				,"  It¡¯s important to note that the actual numbers you use to mark the list have"
+				,"* If you instead wrote the list in Markdown like this"
+		};
+		converter.init();
+		assertEquals("<ul>\n" 
+				+"<li>Markdown supports ordered (numbered) and unordered (bulleted) lists.\n"
+				+"It¡¯s important to note that the actual numbers you use to mark the list have</li>\n"
+				+"<li>If you instead wrote the list in Markdown like this</li>\n"
+				+"</ul>\n\n", converter.convert(tc4_4));
+		
+		// normal + nested + indent + normal
+		String[] tc4_5 = {"* Markdown supports ordered (numbered) and unordered (bulleted) lists."
 				,"* It¡¯s important to note that the actual numbers you use to mark the list have"
 				,"  no effect on the HTML output Markdown produces. The HTML Markdown produces"
 				,"  from the above list is:"
@@ -33,7 +84,7 @@ public class ConverterTest {
 					"no effect on the HTML output Markdown produces. The HTML Markdown produces" + "\n" +
 					"from the above list is:</li>" + "\n" +
 					"<li>If you instead wrote the list in Markdown like this</li>" + "\n" +
-					"</ul>\n\n", converter.convert(tc4));
+					"</ul>\n\n", converter.convert(tc4_5));
 					
 		
 		// test5 : block quote
