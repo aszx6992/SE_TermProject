@@ -43,4 +43,4 @@ It consists of:
 	      (assigns the same name with the source .md file if output file name is not given. In this case, returns source.html)
 
 
-	*Note that at least one .md file must be specified*
+	**Note that at least one .md file must be specified*
