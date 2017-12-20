@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Converter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mdparser program</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Converter.java</span></div><h1>Converter.java</h1><pre class="source lang-java linenums">import java.io.*;
+import java.nio.Buffer;
+
+public class Converter {
+	private StringBuffer finalResult;
+	private InString instring;
+
+	//elements for converting input
+	private String[] file;										//input file read as array of strings
+	private int lineIndex;										//cur index pointer to line in file
+	private int prevIndex;										//starting index of previous append to StringBuffer
+	private String line;										//string to read lines
+	
+<span class="nc" id="L14">	public Converter () {</span>
+<span class="nc" id="L15">		finalResult = new StringBuffer();</span>
+<span class="nc" id="L16">		instring = new InString();</span>
+<span class="nc" id="L17">		lineIndex = 0;</span>
+<span class="nc" id="L18">		prevIndex = 0;</span>
+<span class="nc" id="L19">	}</span>
+	
+	public void init(){
+<span class="nc" id="L22">		finalResult = new StringBuffer();</span>
+<span class="nc" id="L23">		instring = new InString();</span>
+<span class="nc" id="L24">		lineIndex = 0;</span>
+<span class="nc" id="L25">		prevIndex = 0;</span>
+<span class="nc" id="L26">	}</span>
+	
+	public String convert (String[] file_input) {
+<span class="nc" id="L29">		file = file_input;</span>
+
+		//read file line by line
+<span class="nc bnc" id="L32" title="All 2 branches missed.">		while (lineIndex &lt; file.length ) {</span>
+			//newline
+<span class="nc bnc" id="L34" title="All 2 branches missed.">			if(file[lineIndex].length() == 0) {</span>
+<span class="nc" id="L35">				finalResult.append(&quot;\n&quot;);</span>
+<span class="nc" id="L36">				lineIndex++;</span>
+			}
+			//line break
+<span class="nc bnc" id="L39" title="All 2 branches missed.">			else if(file[lineIndex].contains(&quot;- - -&quot;)) {</span>
+<span class="nc" id="L40">				finalResult.append(&quot;&lt;hr&gt;\n&quot;);</span>
+<span class="nc" id="L41">				lineIndex++;</span>
+			}
+			//lists
+<span class="nc bnc" id="L44" title="All 6 branches missed.">			else if(file[lineIndex].substring(0, 2).equals(&quot;* &quot;) || file[lineIndex].substring(0, 2).equals(&quot;- &quot;) || file[lineIndex].substring(0, 2).equals(&quot;+ &quot;)){</span>
+<span class="nc" id="L45">				line = convertList(0);</span>
+<span class="nc" id="L46">				finalResult.append(line + &quot;\n&quot;);</span>
+			}
+			//block quotes
+<span class="nc bnc" id="L49" title="All 2 branches missed.">			else if (file[lineIndex].charAt(0)=='&gt;') {</span>
+<span class="nc" id="L50">				line = convertBlockQuote();</span>
+<span class="nc" id="L51">				finalResult.append(line + &quot;\n&quot;);</span>
+			}
+			//inline codes
+<span class="nc bnc" id="L54" title="All 2 branches missed.">			else if (file[lineIndex].charAt(0) == '&lt;') {</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">				if(file[lineIndex].substring(0, 7).equals(&quot;&lt;table&gt;&quot;)) {</span>
+<span class="nc" id="L56">					line = convertTable();</span>
+<span class="nc" id="L57">					finalResult.append(line+&quot;\n&quot;);</span>
+				}
+				else {
+<span class="nc" id="L60">					line = convertInlineCode();</span>
+<span class="nc" id="L61">					finalResult.append((line+&quot;\n&quot;));</span>
+				}
+			}
+			//line heading H1
+<span class="nc bnc" id="L65" title="All 2 branches missed.">			else if (file[lineIndex].contains(&quot;===&quot;)) {</span>
+<span class="nc" id="L66">				line = convertLineHeading(1);</span>
+<span class="nc" id="L67">				finalResult.replace(prevIndex, finalResult.length(), line);</span>
+			}
+			//line heading H2
+<span class="nc bnc" id="L70" title="All 2 branches missed.">			else if(file[lineIndex].contains(&quot;---&quot;)) {</span>
+<span class="nc" id="L71">				line = convertLineHeading(2);</span>
+<span class="nc" id="L72">				finalResult.replace(prevIndex, finalResult.length(), line);</span>
+			}
+			//title
+<span class="nc bnc" id="L75" title="All 2 branches missed.">			else if(file[lineIndex].charAt(0) == '#') {</span>
+<span class="nc" id="L76">				line = convertHeading();</span>
+<span class="nc" id="L77">				finalResult.append(line + &quot;\n&quot;);</span>
+			}
+<span class="nc bnc" id="L79" title="All 2 branches missed.">			else if(file[lineIndex].charAt(0) == '[') {</span>
+<span class="nc" id="L80">				line = instring.convert(file[lineIndex]);</span>
+<span class="nc" id="L81">				EditURL(line);</span>
+<span class="nc" id="L82">				lineIndex++;</span>
+			}
+			//plain text
+			else  {
+<span class="nc" id="L86">				line = convertPlainText();</span>
+<span class="nc" id="L87">				prevIndex = finalResult.length();</span>
+<span class="nc" id="L88">				finalResult.append(line + &quot;\n&quot;);</span>
+			}
+		}
+
+<span class="nc" id="L92">		return finalResult.toString();</span>
+	}
+
+	private String convertList(int spaceNum) {
+<span class="nc" id="L96">		StringBuffer listBuffer = new StringBuffer();</span>
+<span class="nc" id="L97">		String word = null;</span>
+<span class="nc" id="L98">		listBuffer.append(&quot;&lt;ul&gt;\n&quot;);</span>
+
+<span class="nc" id="L100">		word = file[lineIndex].substring(spaceNum+2);</span>
+<span class="nc" id="L101">		listBuffer.append(&quot;&lt;li&gt;&quot;+word);</span>
+
+<span class="nc" id="L103">		lineIndex++;</span>
+<span class="nc bnc" id="L104" title="All 4 branches missed.">		while (lineIndex &lt; file.length &amp;&amp; file[lineIndex].length() &gt; 0) {</span>
+
+			//when the list starts with -, *, +, wrap with &lt;/li&gt;
+<span class="nc bnc" id="L107" title="All 6 branches missed.">			if (file[lineIndex].substring(spaceNum, spaceNum + 2).equals(&quot;- &quot;) || file[lineIndex].substring(spaceNum, spaceNum + 2).equals(&quot;+ &quot;) || file[lineIndex].substring(spaceNum, spaceNum + 2).equals(&quot;* &quot;)) {</span>
+<span class="nc" id="L108">				listBuffer.append(&quot;&lt;/li&gt;\n&quot;);</span>
+<span class="nc" id="L109">				word = &quot;&lt;li&gt;&quot; + file[lineIndex].substring(spaceNum + 2);</span>
+			}
+<span class="nc bnc" id="L111" title="All 4 branches missed.">			else if (file[lineIndex].substring(0, spaceNum).equals(&quot;  &quot;) &amp;&amp; Character.isLetter(file[lineIndex].substring(spaceNum).charAt(0))) {</span>
+<span class="nc" id="L112">				word = &quot;\n&quot; + file[lineIndex].substring(spaceNum);</span>
+			}
+<span class="nc bnc" id="L114" title="All 2 branches missed.">			else if (file[lineIndex].substring(spaceNum, spaceNum + 2).equals(&quot;  &quot;)) {</span>
+				//when the list is just a continuing sentence, append to the previous sentence
+<span class="nc bnc" id="L116" title="All 2 branches missed.">				if(Character.isLetter(file[lineIndex].substring(spaceNum+2).charAt(0))) {</span>
+<span class="nc" id="L117">					word = &quot;\n&quot; + file[lineIndex].substring(spaceNum+2);</span>
+				}
+				//recursively wrap lists
+<span class="nc bnc" id="L120" title="All 6 branches missed.">				else if (file[lineIndex].substring(spaceNum+2, spaceNum+4).equals(&quot;- &quot;) || file[lineIndex].substring(spaceNum+2, spaceNum+4).equals(&quot;* &quot;) || file[lineIndex].substring(spaceNum+2, spaceNum+4).equals(&quot;+ &quot;)){</span>
+<span class="nc" id="L121">					word = &quot;\n&quot; + convertList(spaceNum+2);</span>
+<span class="nc" id="L122">					lineIndex--;</span>
+				}
+			}
+			else {
+				break;
+			}
+<span class="nc" id="L128">			listBuffer.append(word);</span>
+<span class="nc" id="L129">			lineIndex++;</span>
+		}
+<span class="nc" id="L131">		listBuffer.append(&quot;&lt;/li&gt;\n&lt;/ul&gt;\n&quot;);</span>
+<span class="nc" id="L132">		return listBuffer.toString();</span>
+	}
+
+	private void EditURL (String ref) {
+<span class="nc" id="L136">		String word, link=&quot;&quot;;</span>
+		int index, start, end;
+
+<span class="nc" id="L139">		index = finalResult.lastIndexOf(instring.getRef());</span>
+
+<span class="nc" id="L141">		start = index;</span>
+<span class="nc" id="L142">		end = index+4;</span>
+
+
+<span class="nc bnc" id="L145" title="All 2 branches missed.">		while(finalResult.charAt(end) != '#') {</span>
+<span class="nc" id="L146">			link = link +finalResult.charAt(end);</span>
+<span class="nc" id="L147">			end++;</span>
+		}
+
+<span class="nc" id="L150">		word = ref + link + &quot;&lt;/a&gt;&quot;;</span>
+
+<span class="nc" id="L152">		finalResult.replace(start, end+1, word);</span>
+
+<span class="nc" id="L154">		instring.resetRef();</span>
+<span class="nc" id="L155">	}</span>
+
+	private String convertInlineCode() {
+		String word;
+<span class="nc" id="L159">		StringBuffer inlineCodeBuffer = new StringBuffer();</span>
+<span class="nc" id="L160">		int index = file[lineIndex].lastIndexOf(&quot;&lt;code&gt;&quot;);</span>
+<span class="nc" id="L161">		index = index + 6;</span>
+
+		//split inline code from tags
+<span class="nc" id="L164">		word = file[lineIndex].substring(0,index+1);</span>
+<span class="nc" id="L165">		inlineCodeBuffer.append(word);</span>
+
+		//convert with instring markdown syntax
+<span class="nc" id="L168">		word = instring.convert(file[lineIndex].substring(index+1));</span>
+<span class="nc" id="L169">		inlineCodeBuffer.append(word+&quot;\n&quot;);</span>
+
+<span class="nc" id="L171">		lineIndex++;</span>
+
+<span class="nc bnc" id="L173" title="All 2 branches missed.">		while (!file[lineIndex].contains(&quot;code&quot;)) {</span>
+<span class="nc" id="L174">			inlineCodeBuffer.append(file[lineIndex] + &quot;\n&quot;);</span>
+<span class="nc" id="L175">			lineIndex++;</span>
+		}
+
+<span class="nc" id="L178">		inlineCodeBuffer.append(file[lineIndex]);</span>
+<span class="nc" id="L179">		lineIndex++;</span>
+
+<span class="nc" id="L181">		return inlineCodeBuffer.toString();</span>
+	}
+
+	private String convertBlockQuote() {
+<span class="nc" id="L185">		StringBuffer blockQuoteBuffer = new StringBuffer();</span>
+		String word;
+<span class="nc" id="L187">		int index = 0;</span>
+
+		//splice indentation symbol
+<span class="nc bnc" id="L190" title="All 2 branches missed.">		while  (!Character.isLetter(file[lineIndex].charAt(index))) {</span>
+<span class="nc" id="L191">			index++;</span>
+		}
+<span class="nc" id="L193">		word = file[lineIndex].substring(index);</span>
+
+		//wrap with blockquote
+<span class="nc" id="L196">		blockQuoteBuffer.append(&quot;&lt;blockquote&gt;\n  &lt;p&gt;&quot; + word);</span>
+<span class="nc" id="L197">		lineIndex++;</span>
+
+		//add line until newline appears
+<span class="nc bnc" id="L200" title="All 2 branches missed.">		while(file[lineIndex].length() != 0) {</span>
+			//splice indentation if needed
+<span class="nc bnc" id="L202" title="All 2 branches missed.">			if(file[lineIndex].charAt(0) == '&gt;')</span>
+<span class="nc" id="L203">				word = &quot;  &quot; + file[lineIndex].substring(2);</span>
+			else
+<span class="nc" id="L205">				word = &quot;  &quot; + file[lineIndex];</span>
+<span class="nc" id="L206">			blockQuoteBuffer.append(&quot;\n&quot;+ word);</span>
+<span class="nc" id="L207">			lineIndex++;</span>
+		}
+
+		//wrap with &lt;/blockquote&gt;
+<span class="nc" id="L211">		blockQuoteBuffer.append(&quot;&lt;/p&gt;\n&lt;/blockquote&gt;&quot;);</span>
+<span class="nc" id="L212">		lineIndex++;</span>
+
+<span class="nc" id="L214">		return blockQuoteBuffer.toString();</span>
+	}
+
+	private String convertTable() {
+<span class="nc" id="L218">		StringBuffer tableBuffer = new StringBuffer();</span>
+<span class="nc" id="L219">		tableBuffer.append(file[lineIndex] + &quot;\n&quot;);</span>
+
+<span class="nc" id="L221">		lineIndex++;</span>
+
+		//keep reading line and append until table ends
+<span class="nc bnc" id="L224" title="All 2 branches missed.">		while(file[lineIndex].length() &gt; 0) {</span>
+<span class="nc" id="L225">			tableBuffer.append(file[lineIndex] + &quot;\n&quot;);</span>
+<span class="nc" id="L226">			lineIndex++;</span>
+		}
+
+<span class="nc" id="L229">		tableBuffer.append(file[lineIndex]);</span>
+<span class="nc" id="L230">		lineIndex++;</span>
+
+<span class="nc" id="L232">		return tableBuffer.toString();</span>
+	}
+
+	private String convertHeading() {
+<span class="nc" id="L236">		String word = &quot;&quot;;</span>
+		//number of # (size of heading)
+<span class="nc" id="L238">		int numOfSharp = 0;</span>
+<span class="nc" id="L239">		int index = 0;</span>
+
+		//count number of # to find size of heading
+<span class="nc bnc" id="L242" title="All 2 branches missed.">		while(file[lineIndex].charAt(index) != ' ') {</span>
+<span class="nc" id="L243">			numOfSharp++;</span>
+<span class="nc" id="L244">			index++;</span>
+		}
+<span class="nc" id="L246">		index++;</span>
+
+		//get the text between the #'s
+<span class="nc bnc" id="L249" title="All 2 branches missed.">		while(file[lineIndex].charAt(index) != '#') {</span>
+<span class="nc" id="L250">			word = word + file[lineIndex].charAt(index);</span>
+<span class="nc" id="L251">			index++;</span>
+		}
+
+		//rebuild word
+<span class="nc" id="L255">		word = &quot;&lt;h&quot;+numOfSharp+&quot;&gt;&quot; + word.trim() + &quot;&lt;/h&quot;+numOfSharp+&quot;&gt;&quot;;</span>
+<span class="nc" id="L256">		lineIndex++;</span>
+
+<span class="nc" id="L258">		return word;</span>
+	}
+
+	private String convertLineHeading(int heading_size) {
+		String word;
+
+		//convert according to markdown syntax
+<span class="nc" id="L265">		word = instring.convert(file[lineIndex-1]);</span>
+<span class="nc" id="L266">		word = &quot;&lt;h&quot;+heading_size+&quot;&gt;&quot; + word + &quot;&lt;/h&quot;+heading_size+&quot;&gt;\n&quot;;</span>
+<span class="nc" id="L267">		lineIndex++;</span>
+<span class="nc" id="L268">		return word;</span>
+	}
+
+	//receives a plain text string, convert markdown syntax, wraps in &lt;p&gt; &lt;/p&gt;
+	private String convertPlainText () {
+<span class="nc" id="L273">		StringBuffer plainTextBuffer = new StringBuffer();</span>
+		String buffer;
+
+		//check for inline markdown syntax
+<span class="nc" id="L277">		buffer = instring.convert(file[lineIndex]);</span>
+
+		//wrap front part of plain text with &lt;p&gt;
+<span class="nc" id="L280">		plainTextBuffer.append(&quot;&lt;p&gt;&quot; + buffer);</span>
+
+<span class="nc" id="L282">		lineIndex++;</span>
+
+		//continue reading lines until not a letter
+<span class="nc bnc" id="L285" title="All 6 branches missed.">		while (lineIndex &lt; file.length &amp;&amp; file[lineIndex].length() &gt; 0 &amp;&amp; Character.isLetter(file[lineIndex].charAt(0))) {</span>
+			//check for inline markdown syntax
+<span class="nc" id="L287">			buffer = instring.convert(file[lineIndex]);</span>
+<span class="nc" id="L288">			plainTextBuffer.append(&quot; &quot; + buffer);</span>
+<span class="nc" id="L289">			lineIndex++;</span>
+		}
+
+<span class="nc bnc" id="L292" title="All 4 branches missed.">		if(lineIndex &lt; file.length &amp;&amp; file[lineIndex].length() == 0){</span>
+<span class="nc" id="L293">			lineIndex++;</span>
+		}
+
+<span class="nc" id="L296">		plainTextBuffer.append(&quot;&lt;/p&gt;&quot;);                            //finish wrapping with &lt;/p&gt;</span>
+
+<span class="nc" id="L298">		return plainTextBuffer.toString();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

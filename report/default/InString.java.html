@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InString.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mdparser program</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">InString.java</span></div><h1>InString.java</h1><pre class="source lang-java linenums">
+public class InString {
+    StringBuffer buffer;
+    String[] inputBuffer;
+    String resultString;
+    int i;
+
+    private String URLref;
+
+    //constructor
+<span class="fc" id="L11">    public InString() {</span>
+<span class="fc" id="L12">        buffer = new StringBuffer();</span>
+<span class="fc" id="L13">        URLref = null;</span>
+<span class="fc" id="L14">    }</span>
+
+    //receives a line and checks for markdown syntax
+    public String convert(String input) {
+<span class="fc" id="L18">        inputBuffer = input.split(&quot;\\s&quot;);</span>
+<span class="fc" id="L19">        String word = null;</span>
+
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        for (i = 0; i &lt; inputBuffer.length; i++) {</span>
+            //blank space
+<span class="fc bfc" id="L23" title="All 2 branches covered.">            if (inputBuffer[i].length() == 0) {</span>
+<span class="fc" id="L24">                buffer.append(&quot; &quot;);</span>
+<span class="fc" id="L25">                continue;</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">            } else if (inputBuffer[i].charAt(0) == '*') {</span>
+                //**bold**
+<span class="fc bfc" id="L28" title="All 2 branches covered.">                if (inputBuffer[i].charAt(1) == '*') {</span>
+<span class="fc" id="L29">                    word = convBold(inputBuffer[i]);</span>
+                }
+                //*emphasis*
+                else {
+<span class="fc" id="L33">                    word =convItalicize(inputBuffer[i]);</span>
+                }
+            //&lt;code&gt;&lt;/code&gt;
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            } else if (inputBuffer[i].charAt(0) == '`') {</span>
+<span class="fc" id="L37">                word = convCode();</span>
+            //image
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            } else if (inputBuffer[i].charAt(0) == '!') {</span>
+<span class="fc" id="L40">                word = convImage(inputBuffer[i]);</span>
+            //URL
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            } else if (inputBuffer[i].charAt(0) == '[') {</span>
+<span class="fc" id="L43">                int type = whatURL(inputBuffer[i]);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">                if (type == 0)</span>
+<span class="fc" id="L45">                    word = convUrl(inputBuffer);</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">                else if (type == -1) {</span>
+<span class="fc" id="L47">                    word = convRefURL(inputBuffer);</span>
+<span class="fc" id="L48">                    buffer.append(word);</span>
+<span class="fc" id="L49">                    break;</span>
+                } else
+<span class="fc" id="L51">                    word = convMarkerURL(inputBuffer[i]);</span>
+<span class="pc bpc" id="L52" title="1 of 4 branches missed.">			} else if (!Character.isLetter(inputBuffer[i].charAt(0)) &amp;&amp; inputBuffer[i].length() == 1) {</span>
+<span class="fc" id="L53">                word = convSpecial(inputBuffer[i]);</span>
+            }else {
+<span class="fc" id="L55">                word = inputBuffer[i];</span>
+            }
+
+<span class="fc" id="L58">            buffer.append(word + &quot; &quot;);</span>
+        }
+
+<span class="fc" id="L61">        resultString = buffer.toString().trim();</span>
+
+        //clear buffer
+<span class="fc" id="L64">        buffer.delete(0, buffer.length());</span>
+
+<span class="fc" id="L66">        return resultString;</span>
+    }
+
+    private String convSpecial(String inputBuffer) {
+<span class="fc" id="L70">		String word = null;</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (inputBuffer.charAt(0) == '&amp;') {</span>
+<span class="fc" id="L72">            word = inputBuffer + &quot;amp;&quot;;</span>
+        }
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        else if (inputBuffer.charAt(0) == '&gt;') {</span>
+<span class="nc" id="L75">            word = &quot;&amp;gt;&quot;;</span>
+        }
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        else if (inputBuffer.charAt(0) == '&lt;') {</span>
+<span class="nc" id="L78">            word = &quot;lt;&quot;;</span>
+        }
+        else
+<span class="fc" id="L81">            word = inputBuffer;</span>
+
+<span class="fc" id="L83">		return word;</span>
+	}
+
+    private String convBold(String inputBuffer) {
+        String word;
+        //create new word
+<span class="fc" id="L89">        word = &quot;&lt;b&gt;&quot; + inputBuffer.substring(2, inputBuffer.length() - 2) + &quot;&lt;/b&gt;&quot;;</span>
+
+<span class="fc" id="L91">        return word;</span>
+    }
+
+    private String convItalicize(String inputBuffer) {
+        String word;
+        //create new word
+<span class="fc" id="L97">        word = &quot;&lt;em&gt;&quot; + inputBuffer.substring(1, inputBuffer.length() - 1) + &quot;&lt;/em&gt;&quot;;</span>
+
+<span class="fc" id="L99">        return word;</span>
+    }
+
+    private String convImage(String inputBuffer) {
+<span class="fc" id="L103">        int index = 2;</span>
+        String tag, ref, word;
+
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        while (inputBuffer.charAt(index) != ']')</span>
+<span class="fc" id="L107">            index++;</span>
+
+<span class="fc" id="L109">        tag = inputBuffer.substring(2, index);</span>
+<span class="fc" id="L110">        ref = inputBuffer.substring(index + 2, inputBuffer.length() - 1);</span>
+
+<span class="fc" id="L112">        word = &quot;&lt;img src=\&quot;&quot; + ref + &quot;\&quot; alt=\&quot;&quot; + tag + &quot;\&quot;&gt;&quot;;</span>
+
+<span class="fc" id="L114">        return word;</span>
+    }
+
+    private String convCode() {
+<span class="fc" id="L118">        String word = &quot;&quot;;</span>
+<span class="fc" id="L119">        String rest = &quot;&quot;;</span>
+<span class="fc" id="L120">        int charIndex = 1;</span>
+
+        //read the text between backticks
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        while (inputBuffer[i].charAt(charIndex) != '`') {</span>
+<span class="fc" id="L124">            word = word + inputBuffer[i].charAt(charIndex);</span>
+<span class="fc" id="L125">            charIndex++;</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">            if (charIndex &gt;= inputBuffer[i].length()) {</span>
+<span class="fc" id="L127">                charIndex = 0;</span>
+<span class="fc" id="L128">                word = word + &quot; &quot;;</span>
+<span class="fc" id="L129">                i++;</span>
+            }
+        }
+
+<span class="fc" id="L133">        charIndex++;</span>
+
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        while(charIndex &lt; inputBuffer[i].length()){</span>
+<span class="fc" id="L136">            rest = rest + inputBuffer[i].charAt(charIndex);</span>
+<span class="fc" id="L137">            charIndex++;</span>
+        }
+
+<span class="fc" id="L140">        word = &quot;&lt;code&gt;&quot;+ word + &quot;&lt;/code&gt;&quot; + rest;</span>
+
+<span class="fc" id="L142">        return word;</span>
+    }
+
+    private String convMarkerURL(String inputBuffer) {
+        String word;
+<span class="fc" id="L147">        String title =&quot;&quot;;</span>
+<span class="fc" id="L148">        String ref =&quot;&quot;;</span>
+<span class="fc" id="L149">        int index =0;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        while(inputBuffer.charAt(index) != ']'){</span>
+<span class="fc" id="L151">            title = title + inputBuffer.charAt(index);</span>
+<span class="fc" id="L152">            index++;</span>
+        }
+<span class="fc" id="L154">        title = title + &quot;#&quot;;</span>
+
+
+<span class="fc" id="L157">        index ++;</span>
+
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        while(inputBuffer.charAt(index) != ']') {</span>
+<span class="fc" id="L160">            ref = ref + inputBuffer.charAt(index);</span>
+<span class="fc" id="L161">            index ++;</span>
+        }
+
+<span class="fc" id="L164">        index++;</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">        while(index &lt; inputBuffer.length()){</span>
+<span class="nc" id="L166">            title = title + inputBuffer.charAt(index);</span>
+<span class="nc" id="L167">            index++;</span>
+        }
+
+<span class="fc" id="L170">        ref = ref + &quot;]&quot;;</span>
+<span class="fc" id="L171">        word = ref + title;</span>
+<span class="fc" id="L172">        return word;</span>
+    }
+
+    private String convRefURL(String[] inputBuffer) {
+<span class="fc" id="L176">        String add = inputBuffer[1];</span>
+<span class="fc" id="L177">        String title = inputBuffer[2].substring(1, inputBuffer[2].length()-1);</span>
+<span class="fc" id="L178">        String word = &quot;&lt;a href=\&quot;&quot;+add+&quot;\&quot; title=\&quot;&quot; + title + &quot;\&quot;&gt;&quot;;</span>
+<span class="fc" id="L179">        URLref = inputBuffer[0].substring(0, inputBuffer[0].length()-1);</span>
+<span class="fc" id="L180">        return word;</span>
+
+    }
+
+    private String convUrl(String[] inputBuffer) {
+<span class="fc" id="L185">        int letterIndex = 1;</span>
+<span class="fc" id="L186">        String link = &quot;&quot;;</span>
+<span class="fc" id="L187">        String add = &quot;&quot;;</span>
+<span class="fc" id="L188">        String title = &quot;&quot;;</span>
+<span class="fc" id="L189">        String rest = &quot;&quot;;</span>
+        String word;
+
+        //keep reading the link until until the end of the bracket
+<span class="pc bpc" id="L193" title="1 of 4 branches missed.">        while (letterIndex &lt; inputBuffer[i].length() &amp;&amp; inputBuffer[i].charAt(letterIndex) != ']') {</span>
+<span class="fc" id="L194">            link = link + inputBuffer[i].charAt(letterIndex);</span>
+<span class="fc" id="L195">            letterIndex++;</span>
+        }
+
+        //if the pointer has finished iterating through current word, move onto next
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">        if(letterIndex &gt;= inputBuffer[i].length()){</span>
+<span class="nc" id="L200">            i++;</span>
+<span class="nc" id="L201">            letterIndex = 1;</span>
+        }
+        else
+<span class="fc" id="L204">            letterIndex = letterIndex + 2;</span>
+
+        //read the hyperlink until space
+<span class="pc bpc" id="L207" title="1 of 4 branches missed.">        while (letterIndex &lt; inputBuffer[i].length() &amp;&amp; inputBuffer[i].charAt(letterIndex) != ' ') {</span>
+<span class="fc" id="L208">            add = add + inputBuffer[i].charAt(letterIndex);</span>
+<span class="fc" id="L209">            letterIndex++;</span>
+        }
+
+        //if the pointer has finished iterating through current word, move onto next
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">        if(letterIndex &gt;= inputBuffer[i].length()) {</span>
+<span class="fc" id="L214">           i++;</span>
+<span class="fc" id="L215">            letterIndex = 1;</span>
+        }
+        else
+<span class="nc" id="L218">            letterIndex = letterIndex + 2;</span>
+
+        //read the title
+<span class="pc bpc" id="L221" title="1 of 4 branches missed.">        while (letterIndex &lt; inputBuffer[i].length() &amp;&amp; inputBuffer[i].charAt(letterIndex) != '&quot;') {</span>
+<span class="fc" id="L222">            title = title + inputBuffer[i].charAt(letterIndex);</span>
+<span class="fc" id="L223">            letterIndex++;</span>
+        }
+
+<span class="fc" id="L226">        letterIndex = letterIndex + 2;</span>
+
+        //get the rest of the sentence
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        while (letterIndex &lt; inputBuffer[i].length()) {</span>
+<span class="fc" id="L230">            rest = rest + inputBuffer[i].charAt(letterIndex);</span>
+<span class="fc" id="L231">            letterIndex++;</span>
+        }
+
+        //build hyperlink containing sentence
+<span class="fc" id="L235">        word =&quot;&lt;a href=\&quot;&quot; + add + &quot;\&quot; title=\&quot;&quot; + title + &quot;\&quot;&gt;&quot; + link + &quot;&lt;/a&gt;&quot; + rest;</span>
+<span class="fc" id="L236">        return word;</span>
+    }
+
+    //checks for what type of URL
+    private int whatURL(String word){
+<span class="fc" id="L241">        int index =0;</span>
+
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        while(word.charAt(index) != ']')</span>
+<span class="fc" id="L244">            index++;</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">        if(word.charAt(index+1) == '[')</span>
+<span class="fc" id="L246">            return 1;                   //URL calling for reference URL</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        else if(word.charAt(index+1) == ':')</span>
+<span class="fc" id="L248">            return -1;                  //reference URL (at the end of file)</span>
+
+<span class="fc" id="L250">        return 0;                       //regular URL</span>
+    }
+
+    public String getRef () {
+<span class="nc" id="L254">        return URLref;</span>
+    }
+    public void resetRef() {
+<span class="nc" id="L257">        URLref = null;</span>
+<span class="nc" id="L258">    }</span>
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

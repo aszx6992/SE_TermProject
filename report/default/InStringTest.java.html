@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InStringTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mdparser program</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">InStringTest.java</span></div><h1>InStringTest.java</h1><pre class="source lang-java linenums">import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+<span class="fc" id="L5">public class InStringTest {</span>
+
+	@Test
+	public void urlTest() {
+<span class="fc" id="L9">		InString test = new InString();</span>
+		
+<span class="fc" id="L11">		String test_result = test.convert(&quot;Submit the report via [Hisnet](http://hisnet.handong.edu \&quot;Hisnet\&quot;).&quot;);</span>
+<span class="fc" id="L12">		System.out.println(test_result);</span>
+<span class="fc" id="L13">		assertEquals(&quot;Submit the report via &lt;a href=\&quot;http://hisnet.handong.edu\&quot; title=\&quot;Hisnet\&quot;&gt;Hisnet&lt;/a&gt;.&quot;, test_result);</span>
+		
+<span class="fc" id="L15">	}</span>
+	
+	@Test
+	public void ref_urlTest() {
+<span class="fc" id="L19">		InString test = new InString();</span>
+		
+<span class="fc" id="L21">		String test_result = test.convert(&quot;[1]: Github.com (GitHub)&quot;);</span>
+<span class="fc" id="L22">		System.out.println(test_result);</span>
+<span class="fc" id="L23">		assertEquals(&quot;&lt;a href=\&quot;Github.com\&quot; title=\&quot;GitHub\&quot;&gt;&quot;, test_result);</span>
+		
+<span class="fc" id="L25">	}</span>
+	
+	@Test
+	public void marker_urlTest() {
+<span class="fc" id="L29">		InString test = new InString();</span>
+		
+<span class="fc" id="L31">		String test_result = test.convert(&quot;You are given a documentation [link][1] on the Markdown syntax which starts as follows:&quot;);</span>
+<span class="fc" id="L32">		System.out.println(test_result);</span>
+<span class="fc" id="L33">		assertEquals(&quot;You are given a documentation [1][link# on the Markdown syntax which starts as follows:&quot;, test_result);</span>
+		
+<span class="fc" id="L35">	}</span>
+	
+	@Test
+	public void specialTest() {
+<span class="fc" id="L39">		InString test = new InString();</span>
+				
+<span class="fc" id="L41">		String test_result = test.convert(&quot;- Design &amp; Implementation&quot;);</span>
+<span class="fc" id="L42">		assertEquals(&quot;- Design &amp;amp; Implementation&quot;, test_result);</span>
+		
+<span class="fc" id="L44">	}</span>
+	
+	@Test
+	public void codeTest() {
+<span class="fc" id="L48">		InString test = new InString();</span>
+		
+<span class="fc" id="L50">		String test_result = test.convert(&quot;Do not forget to `git push` once you make `git commit`.&quot;);</span>
+<span class="fc" id="L51">		System.out.println(test_result);</span>
+<span class="fc" id="L52">		assertEquals(&quot;Do not forget to &lt;code&gt;git push&lt;/code&gt; once you make &lt;code&gt;git commit&lt;/code&gt;.&quot;, test_result);</span>
+		
+<span class="fc" id="L54">	}</span>
+	
+	@Test
+	public void boldTest() {
+<span class="fc" id="L58">		InString test = new InString();</span>
+
+<span class="fc" id="L60">		String test_result = test.convert(&quot;This assignment askes you to build a program that reads a **Markdown** file and converts it to a HTML file.&quot;);</span>
+<span class="fc" id="L61">		System.out.println(test_result);</span>
+<span class="fc" id="L62">		assertEquals(&quot;This assignment askes you to build a program that reads a &lt;b&gt;Markdown&lt;/b&gt; file and converts it to a HTML file.&quot;, test_result);</span>
+		
+<span class="fc" id="L64">	}</span>
+	
+	@Test
+	public void imageTest() {
+<span class="fc" id="L68">		InString test = new InString();</span>
+		
+<span class="fc" id="L70">		String test_result = test.convert(&quot;All copy rights reserved in Handong Global University  ![tag](https://www.handong.edu/site/handong/res/img/logo.png)&quot;);</span>
+<span class="fc" id="L71">		assertEquals(&quot;All copy rights reserved in Handong Global University  &lt;img src=\&quot;https://www.handong.edu/site/handong/res/img/logo.png\&quot; alt=\&quot;tag\&quot;&gt;&quot;, test_result);</span>
+		
+<span class="fc" id="L73">	}</span>
+	
+	@Test
+	public void italicTest() {
+<span class="fc" id="L77">		InString test = new InString();</span>
+		
+<span class="fc" id="L79">		String test_result = test.convert(&quot;This assignment askes you to build a program that reads a *Markdown* file and converts it to a HTML file.&quot;);</span>
+<span class="fc" id="L80">		System.out.println(test_result);</span>
+<span class="fc" id="L81">		assertEquals(&quot;This assignment askes you to build a program that reads a &lt;em&gt;Markdown&lt;/em&gt; file and converts it to a HTML file.&quot;, test_result);</span>
+<span class="fc" id="L82">	}</span>
+	
+	@Test
+	public void addwordTest() {
+<span class="fc" id="L86">		InString test = new InString();</span>
+		
+<span class="fc" id="L88">		String test_result = test.convert(&quot;Pre-formatted code blocks are used for writing about programming or markup source code.&quot;);</span>
+<span class="fc" id="L89">		System.out.println(test_result);</span>
+<span class="fc" id="L90">		assertEquals(&quot;Pre-formatted code blocks are used for writing about programming or markup source code.&quot;, test_result);</span>
+<span class="fc" id="L91">	}</span>
+	
+//	@Test
+//	public void newlineTest() {
+//		InString test = new InString();
+//		
+//		String test_result = test.convert(&quot;&quot;);
+//		System.out.println(test_result);
+//		assertEquals(&quot; &quot;, test_result);
+//	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>
