@@ -2,31 +2,21 @@ This repository is for 2017-2 Software Engineering Term Project
 
 		USER COMMANDS
 NAME
-	mdparser - parses .md file(s) into html file(s).
+	mdparser - parses .md file into html file.
 
 SYNOPSIS
-	mdparser [OPTION] ... FILE.md ... [FILE.html] ... [FILE2.md] .... 
+	mdparser FILE.md [FILE.html]
 
 DESCRIPTION
 	This manual page documents the mdparser command line functionality. It receives a .md file and
-	converts it into a html file corresponding to the option given with it. One or more .md files followed by one
-	or more .html files can be given as input. Usage of mdparser are given below. 
+	converts it into a html file. Usage of mdparser are given below. 
+	
 		
-	   -  mdparser -st source.md destination.html 
+	   -  mdparser source.md destination.html 
 	      (converts source.md into a file named destination.html in stylish format)
 
-	   -  mdparser -st source.md 		     
+	   -  mdparser source.md 		     
 	      (assigns the same name with the source .md file if output file name is not given. In this case, returns source.html)
 
-	**Note that at least one .md file must be specified, and giving more .html file names than .md files is illegal.
-	    (e.g.  mdparser -st source1.md source1.html source2.html)
 
-OPTION
-	This manual page documents the use of mdparser. mdparser converts .md file(s) into .html file(s)
-	with the specified option. By default, it translates a .md file into a plain html file.
-
-	If the -st option is given, the mdparser converts and interprets .md file into stylish html.
-
-	If the -sl option is given, the mdparser converts and interprets .md file into slideshow html.
-
-	By default, or if the -pl option is given, mdparser converts and interprets .md file into plain html.
+	**Note that at least one .md file must be specified.
