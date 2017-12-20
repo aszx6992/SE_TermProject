@@ -18,10 +18,6 @@ DESCRIPTION
 	   -  mdparser -st source.md 		     
 	      (assigns the same name with the source .md file if output file name is not given. In this case, returns source.html)
 
-	   -  mdparser -st source1.md source2.md destination1.html
-	      (converts source1.md into destination1.html, and source2.md into source2.html)
-
-
 	**Note that at least one .md file must be specified, and giving more .html file names than .md files is illegal.
 	    (e.g.  mdparser -st source1.md source1.html source2.html)
 
