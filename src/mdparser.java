@@ -73,12 +73,12 @@ public class mdparser {
                 file = readBuffer.toArray(new String[0]);               //convert arraylist to array of strings
 
 
-                //writer = new BufferedWriter(new FileWriter("../doc/" + htmlName.get(i)));
+                writer = new BufferedWriter(new FileWriter("../doc/" + htmlName.get(i)));
                 converter = new Converter();
                 result = converter.convert(file);
 
                 System.out.println(result);
-                //writer.write(result);
+                writer.write(result);
 
                 System.out.println("Created new file(s) at \'../doc/\'!");
 
