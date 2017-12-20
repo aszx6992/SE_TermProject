@@ -32,8 +32,6 @@ A build and testing file for mdparser
 			<classpath path="lib/hamcrest-core.jar" />
 			<classpath path="lib/annotations-15.0.jar" />
 			<formatter type="plain" usefile="false" />
-<!--			<test name="mdparserTest">   -->
-<!--			<test name="ConverterTest"></test>  -->
 			<test name="InStringTest">
 		</test>
 	</junit>
@@ -45,6 +43,7 @@ A build and testing file for mdparser
 				<classpath path="lib/junit.jar" />
 				<classpath path="lib/hamcrest-core.jar" />
 				<formatter type="plain" usefile="false" />
+				<test name="ConverterTest"></test>  
 				<test name="InStringTest">
 				</test>
 			</junit>
