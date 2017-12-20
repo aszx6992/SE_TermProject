@@ -1,3 +1,4 @@
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -12,25 +13,26 @@ public class Converter {
 	private int lineIndex;										//cur index pointer to line in file
 	private int prevIndex;										//starting index of previous append to StringBuffer
 	private String line;										//string to read lines
-
+	
 	public Converter () {
 		finalResult = new StringBuffer();
 		instring = new InString();
 		lineIndex = 0;
 		prevIndex = 0;
 	}
-
+	
+	public void init(){
+		finalResult = new StringBuffer();
+		instring = new InString();
+		lineIndex = 0;
+		prevIndex = 0;
+	}
+	
 	public String convert (String[] file_input) {
 		file = file_input;
 
 		//read file line by line
 		while (lineIndex < file.length ) {
-
-			/*if(lineIndex == 5) {
-				System.out.println(file[lineIndex]);
-				System.out.println("Break");
-			}*/
-
 			//newline
 			if(file[lineIndex].length() == 0) {
 				finalResult.append("\n");
@@ -96,14 +98,12 @@ public class Converter {
 	private String convertList(int spaceNum) {
 		StringBuffer listBuffer = new StringBuffer();
 		String word = null;
-
 		listBuffer.append("<ul>\n");
 
 		word = file[lineIndex].substring(spaceNum+2);
 		listBuffer.append("<li>"+word);
 
 		lineIndex++;
-
 		while (lineIndex < file.length && file[lineIndex].length() > 0) {
 
 			//when the list starts with -, *, +, wrap with </li>
@@ -122,6 +122,7 @@ public class Converter {
 				//recursively wrap lists
 				else if (file[lineIndex].substring(spaceNum+2, spaceNum+4).equals("- ") || file[lineIndex].substring(spaceNum+2, spaceNum+4).equals("* ") || file[lineIndex].substring(spaceNum+2, spaceNum+4).equals("+ ")){
 					word = "\n" + convertList(spaceNum+2);
+					lineIndex--;
 				}
 			}
 			else {
