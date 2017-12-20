@@ -1,0 +1,77 @@
+<project name="mdparser" default="compile" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
+
+<description>
+A build and testing file for mdparser
+</description>
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+                <classpath path="lib/jacocoant.jar"/>
+	</taskdef>
+<!--set up some directories used by this project-->
+<target name="init" description="setup project directories">
+  <mkdir dir="classes"/>
+</target>
+	
+<!--global properties for this build file -->
+<property name="source.dir" location="src"/>
+<property name="doc.dir" location="doc"/>
+<property name="classes.dir" location="classes"/>
+
+
+<!--Compile java code in &{src.dir} into ${classes.dir}-->
+<target name="compile" depends="init" description="compile java sources">
+  <javac srcdir="${source.dir}" destdir="${classes.dir}" debug="true" includeantruntime="false" >
+		<classpath path="lib/junit.jar" />
+		<classpath path="lib/hamcrest-core.jar" />
+	</javac>
+</target>
+
+<target name="test" depends ="compile">
+		<junit showoutput="true" printsummary="on" enabletestlistenerevents="true" fork="true">
+			<classpath path="classes" />
+			<classpath path="lib/junit.jar" />
+			<classpath path="lib/hamcrest-core.jar" />
+			<classpath path="lib/annotations-15.0.jar" />
+			<formatter type="plain" usefile="false" />
+<!--			<test name="mdparserTest">   -->
+<!--			<test name="ConverterTest"></test>  -->
+			<test name="InStringTest">
+		</test>
+	</junit>
+</target>
+<target name="cov-test" depends="compile">
+		<jacoco:coverage>
+			<junit showoutput="true" printsummary="on" enabletestlistenerevents="true" fork="true">
+				<classpath path="classes" />
+				<classpath path="lib/junit.jar" />
+				<classpath path="lib/hamcrest-core.jar" />
+				<formatter type="plain" usefile="false" />
+				<test name="InStringTest">
+				</test>
+			</junit>
+		</jacoco:coverage>
+</target>
+
+<target name="cov-report" depends="cov-test">
+                <jacoco:report>
+                        <executiondata>
+				<file file="jacoco.exec" />
+                        </executiondata>
+
+                        <structure name="mdparser program">
+                                <classfiles>
+                                        <fileset dir="classes" />
+                                </classfiles>
+                                <sourcefiles>
+                                        <fileset dir="src" />
+                                </sourcefiles>
+                        </structure>
+
+                        <html destdir="report" />
+                </jacoco:report>
+</target>
+
+
+<target name="clean">
+	<delete dir="classes" />
+</target>
+</project>
