@@ -12,6 +12,7 @@ public class mdparser {
     static LinkedList<String> options = new LinkedList<String>();
     static LinkedList<String> mdFiles = new LinkedList<String>();
     static LinkedList<String> htmlName = new LinkedList<String>();
+    static String testline;
 
     static String[] commands = {"-pl", "-st", "-sl"};
 
@@ -86,6 +87,7 @@ public class mdparser {
                 //read file and save to arraylist buffer
                 while ((line = reader.readLine()) != null)
                 {
+                	testline = line;
                     readBuffer.add(line);
                 }
                 file = readBuffer.toArray(new String[0]);               //convert arraylist to array of strings
