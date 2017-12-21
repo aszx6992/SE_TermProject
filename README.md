@@ -13,6 +13,8 @@ It consists of:
  : It is used to build mdparser, test JUnit, and analyze Jacoco branch coverage.
 ---------------------
 ## How to build ##
+<br>*Before start building, it is required that you have installed Ant in your computer*
+
 1. For just compiling mdparser programs, simply command :<br>
 <code> $ ant </code>
 2. If you want to run JUnit test for mdparser programs, command : <br>

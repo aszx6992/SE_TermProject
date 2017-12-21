@@ -1,5 +1,3 @@
-package SE_package;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -93,7 +91,7 @@ public class mdparser {
                 file = readBuffer.toArray(new String[0]);               //convert arraylist to array of strings
 
 
-                writer = new BufferedWriter(new FileWriter(htmlName.get(i)));
+                writer = new BufferedWriter(new FileWriter("../doc/"+htmlName.get(i)));
                 converter = new Converter();
                 result = converter.convert(file);
 

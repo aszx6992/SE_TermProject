@@ -19,7 +19,7 @@ A build and testing file for mdparser
 
 <!--Compile java code in &{src.dir} into ${classes.dir}-->
 <target name="compile" depends="init" description="compile java sources">
-  <javac srcdir="${source.dir}" destdir="${classes.dir}" debug="true" includeantruntime="false" >
+  <javac srcdir="${source.dir}" destdir="${classes.dir}" debug="true" includeantruntime="false" encoding="utf-8" >
 		<classpath path="lib/junit.jar" />
 		<classpath path="lib/hamcrest-core.jar" />
 	</javac>
@@ -33,6 +33,8 @@ A build and testing file for mdparser
 			<classpath path="lib/annotations-15.0.jar" />
 			<formatter type="plain" usefile="false" />
 			<test name="InStringTest">
+			<test name="ConverterTest"></test>
+			<test name="mdparserTest"></test>
 		</test>
 	</junit>
 </target>
@@ -43,6 +45,7 @@ A build and testing file for mdparser
 				<classpath path="lib/junit.jar" />
 				<classpath path="lib/hamcrest-core.jar" />
 				<formatter type="plain" usefile="false" />
+				<test name="mdparserTest"></test>
 				<test name="ConverterTest"></test>  
 				<test name="InStringTest">
 				</test>
