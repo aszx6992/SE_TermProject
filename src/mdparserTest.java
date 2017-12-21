@@ -1,5 +1,3 @@
-package SE_package;
-
 import static org.junit.Assert.*;
 import org.junit.*;
 import java.util.*;
@@ -78,6 +76,28 @@ public class mdparserTest {
     	tester5.main(new String[] {"doaieja"});
         assertEquals("Please input a file extention of '.md' for conversion", outContent.toString());
         tester5 = null;
+    }
+    
+    @Test
+    public void testFor_fileRead() 
+    {
+    	mdparser tester6 = new mdparser();
+    	final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+    	tester6.main(new String[] {"-pl", "doc2.md"});
+        assertEquals("doc2.md", tester6.mdFiles.get(0));
+        tester6 = null;
+    }
+    
+    @Test
+    public void testFor_readLine() 
+    {
+    	mdparser tester7 = new mdparser();
+    	final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+    	tester7.main(new String[] {"-pl", "doc1.md"});
+        assertEquals("Submit the report via [Hisnet](http://hisnet.handong.edu \"Hisnet\").", tester7.testline);
+        tester7 = null;
     }
     
 }
